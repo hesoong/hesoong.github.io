@@ -95,3 +95,8 @@ copyright = '<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_
 #   identifier = "series"
 #   name       = "系列"
 #   url        = "/series"
+
+[outputFormats.Sitemap]
+
+# 移除 standalone 属性
+  xmlStandalone = false 

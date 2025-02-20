@@ -1,5 +1,5 @@
 ---
-title: Openwrt + Tplink ACAP deploy
+title: 部署｜Openwrt + Tplink ACAP
 date: 2023-06-04
 updated: 2023-06-04
 toc: true
