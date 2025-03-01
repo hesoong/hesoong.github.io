@@ -1,0 +1,141 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="ie=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=author content="Mr.heesong@gmail.com Song "><meta name=description content="1. linux忘记root密码 解决办法 2. java环境变量配置 1.编辑系统变量文件：vi /etc/profile export JAVA_HOME=/usr/java/jdk1.8.0_151 export JRE_HOME=$JAVA_HOME/jre export CLASSPATH=.:$JAVA_HOME/lib:$JRE_HOME/lib export PATH=$JAVA_HOME/bin:$PATH 3.进程 netstat -tunlp |grep 22 //查看22端口使用情"><meta name=keywords content="js,javascript,nodejs,jquery,css,sass,gulp,html,git,java,hibernate,spring,maven,mysql,sql,linux,acm,架构,前端,后端,原创,编程,开发,算法,运维,云计算,网络,互联网,linux"><meta name=robots content="noodp"><meta name=theme-color content><link rel=canonical href=https://hesoong.github.io/posts/linux/><title>linux的一些零星记录 :: Song's Blog</title><link rel=stylesheet href=/main.b78c3be9451dc4ca61ca377f3dc2cf2e6345a44c2bae46216a322ef366daa399.css integrity="sha256-t4w76UUdxMphyjd/PcLPLmNFpEwrrkYhajIu82bao5k="><link rel=stylesheet type=text/css href=/css/main.css><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/safari-pinned-tab.svg color><link rel="shortcut icon" href=/favicon.ico><meta name=msapplication-TileColor content><meta itemprop=name content="linux的一些零星记录"><meta itemprop=description content="1. linux忘记root密码 解决办法 2. java环境变量配置 1.编辑系统变量文件：vi /etc/profile export JAVA_HOME=/usr/java/jdk1.8.0_151 export JRE_HOME=$JAVA_HOME/jre export CLASSPATH=.:$JAVA_HOME/lib:$JRE_HOME/lib export PATH=$JAVA_HOME/bin:$PATH 3.进程 netstat -tunlp |grep 22 //查看22端口使用情"><meta itemprop=datePublished content="2019-01-30T00:00:00+00:00"><meta itemprop=dateModified content="2019-01-30T00:00:00+00:00"><meta itemprop=wordCount content="2389"><meta itemprop=image content="https://hesoong.github.io"><meta itemprop=keywords content="linux,"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://hesoong.github.io"><meta name=twitter:title content="linux的一些零星记录"><meta name=twitter:description content="1. linux忘记root密码 解决办法 2. java环境变量配置 1.编辑系统变量文件：vi /etc/profile export JAVA_HOME=/usr/java/jdk1.8.0_151 export JRE_HOME=$JAVA_HOME/jre export CLASSPATH=.:$JAVA_HOME/lib:$JRE_HOME/lib export PATH=$JAVA_HOME/bin:$PATH 3.进程 netstat -tunlp |grep 22 //查看22端口使用情"><meta property="og:title" content="linux的一些零星记录"><meta property="og:description" content="1. linux忘记root密码 解决办法 2. java环境变量配置 1.编辑系统变量文件：vi /etc/profile export JAVA_HOME=/usr/java/jdk1.8.0_151 export JRE_HOME=$JAVA_HOME/jre export CLASSPATH=.:$JAVA_HOME/lib:$JRE_HOME/lib export PATH=$JAVA_HOME/bin:$PATH 3.进程 netstat -tunlp |grep 22 //查看22端口使用情"><meta property="og:type" content="article"><meta property="og:url" content="https://hesoong.github.io/posts/linux/"><meta property="og:image" content="https://hesoong.github.io"><meta property="article:section" content="posts"><meta property="article:published_time" content="2019-01-30T00:00:00+00:00"><meta property="article:modified_time" content="2019-01-30T00:00:00+00:00"><meta property="article:published_time" content="2019-01-30 00:00:00 +0000 UTC"><script async src="https://www.googletagmanager.com/gtag/js?id=G-3X06DFVWWN"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-3X06DFVWWN")</script></head><body><div class=container><header class=header><span class=header__inner><a href=/ style=text-decoration:none><div class=logo><span class=logo__mark>></span>
+<span class=logo__text>rm -rf world</span>
+<span class=logo__cursor></span></div></a><span class=header__right><nav class=menu><ul class=menu__inner><li><a href=https://hesoong.github.io/posts>Blog</a></li><li><a href=https://hesoong.github.io/tags>Tag</a></li><li><a href=/search><svg t="1556783211810" class="search-box-icon" class="icon" style viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2078" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><style/></defs><path d="M981.39652054 920.86314525 704.56522859 644.0318533a366.65501012 366.65501012.0 10-61.73503038 65.64040943L917.55859375 984.40065827zM125.21726707 427.73393664a284.19142939 284.19142939.0 11283.89101562 284.19142939A284.49184317 284.49184317.0 01125.06706019 427.73393664z" fill p-id="2079" data-spm-anchor-id="a313x.7781069.0.i2"/></svg></a></li></ul></nav><span class=menu-trigger><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></span></span></span></header><div class=content><main class=post><ol class=breadcrumb><li><a href=https://hesoong.github.io/>Home</a></li><li><a href=https://hesoong.github.io/posts/>Posts</a></li><li class=active><a href=https://hesoong.github.io/posts/linux/>linux的一些零星记录</a></li></ol><div class=post-info><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>5 minutes</p></div><article><h1 class=post-title><a href=https://hesoong.github.io/posts/linux/>linux的一些零星记录</a></h1><hr><aside id=toc><div class=toc-title>Table of Contents</div><nav id=TableOfContents><ul><li><a href=#1-linux忘记root密码>1. linux忘记root密码</a></li><li><a href=#2-java环境变量配置>2. java环境变量配置</a></li><li><a href=#3进程>3.进程</a></li><li><a href=#4tar解压缩>4.tar解、压缩</a></li><li><a href=#5-linux下动态查看日志>5. linux下动态查看日志</a></li><li><a href=#6-服务自启动>6. 服务自启动</a></li><li><a href=#7网卡配置>7.网卡配置</a></li><li><a href=#8vi编辑器の操作>8.vi编辑器の操作</a></li><li><a href=#9时间戳>9.时间戳</a></li><li><a href=#10文件比较之diff>10.文件比较之&rsquo;diff'</a></li><li><a href=#11-linux-从一个ip机器跳转至另一ip机器-ssh>11. linux 从一个IP机器跳转至另一IP机器: ssh</a></li><li><a href=#12-linux系统间的文件目录传输>12. linux系统间的文件（目录）传输</a></li><li><a href=#13-linux-centos7-关于防火墙操作>13. linux centos7 关于防火墙操作</a></li></ul></nav></aside><hr><div class=post-content><h2 id=1-linux忘记root密码>1. linux忘记root密码</h2><p><a href=https://www.cnblogs.com/kerrycode/p/3479925.html>解决办法</a></p><h2 id=2-java环境变量配置>2. java环境变量配置</h2><p>1.编辑系统变量文件：vi /etc/profile</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>export JAVA_HOME<span style=color:#f92672>=</span>/usr/java/jdk1.8.0_151
+</span></span><span style=display:flex><span>export JRE_HOME<span style=color:#f92672>=</span>$JAVA_HOME/jre
+</span></span><span style=display:flex><span>export CLASSPATH<span style=color:#f92672>=</span>.:$JAVA_HOME/lib:$JRE_HOME/lib
+</span></span><span style=display:flex><span>export PATH<span style=color:#f92672>=</span>$JAVA_HOME/bin:$PATH
+</span></span></code></pre></div><h2 id=3进程>3.进程</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>netstat -tunlp |grep <span style=color:#ae81ff>22</span> //查看22端口使用情况
+</span></span></code></pre></div><h2 id=4tar解压缩>4.tar解、压缩</h2><p>1.<strong>tar</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>-c: 建立压缩档案
+</span></span><span style=display:flex><span>-x：解压
+</span></span><span style=display:flex><span>-t：查看内容
+</span></span><span style=display:flex><span>-r：向压缩归档文件末尾追加文件
+</span></span><span style=display:flex><span>-u：更新原压缩包中的文件
+</span></span></code></pre></div><p>2.这五个是独立的命令，压缩解压都要用到其中一个，可以和别的命令连用但只能用其中一个。下面的参数是根据需要在压缩或解压档案时可选的。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>-z：有gzip属性的
+</span></span><span style=display:flex><span>-j：有bz2属性的
+</span></span><span style=display:flex><span>-Z：有compress属性的
+</span></span><span style=display:flex><span>-v：显示所有过程
+</span></span><span style=display:flex><span>-O：将文件解开到标准输出
+</span></span></code></pre></div><p>3.下面的参数-f是必须的</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#75715e># -f: 使用档案名字，切记，这个参数是最后一个参数，后面只能接档案名。</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 这条命令是将所有.jpg的文件打成一个名为all.tar的包。-c是表示产生新的包，-f指定包的文件名。</span>
+</span></span><span style=display:flex><span>tar -cf all.tar *.jpg
+</span></span><span style=display:flex><span><span style=color:#75715e># 这条命令是将所有.gif的文件增加到all.tar的包里面去。-r是表示增加文件的意思。</span>
+</span></span><span style=display:flex><span>tar -rf all.tar *.gif
+</span></span><span style=display:flex><span><span style=color:#75715e># 这条命令是更新原来tar包all.tar中logo.gif文件，-u是表示更新文件的意思。</span>
+</span></span><span style=display:flex><span>tar -uf all.tar logo.gif
+</span></span><span style=display:flex><span><span style=color:#75715e># 这条命令是列出all.tar包中所有文件，-t是列出文件的意思</span>
+</span></span><span style=display:flex><span>tar -tf all.tar
+</span></span><span style=display:flex><span><span style=color:#75715e># 这条命令是解出all.tar包中所有文件，-x是解开的意思</span>
+</span></span><span style=display:flex><span>tar -xf all.tar
+</span></span></code></pre></div><p>4.压缩</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>tar -cvf jpg.tar *.jpg //将目录里所有jpg文件打包成tar.jpg 
+</span></span><span style=display:flex><span>tar -czf jpg.tar.gz *.jpg   //将目录里所有jpg文件打包成jpg.tar后，并且将其用gzip压缩，生成一个gzip压缩过的包，命名为jpg.tar.gz
+</span></span><span style=display:flex><span>tar -cjf jpg.tar.bz2 *.jpg //将目录里所有jpg文件打包成jpg.tar后，并且将其用bzip2压缩，生成一个bzip2压缩过的包，命名为jpg.tar.bz2
+</span></span><span style=display:flex><span>tar -cZf jpg.tar.Z *.jpg   //将目录里所有jpg文件打包成jpg.tar后，并且将其用compress压缩，生成一个umcompress压缩过的包，命名为jpg.tar.Z
+</span></span><span style=display:flex><span>rar a jpg.rar *.jpg //rar格式的压缩，需要先下载rar <span style=color:#66d9ef>for</span> linux
+</span></span><span style=display:flex><span>zip jpg.zip *.jpg //zip格式的压缩，需要先下载zip <span style=color:#66d9ef>for</span> linux
+</span></span></code></pre></div><p>5.解压</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>tar -xvf file.tar //解压 tar包
+</span></span><span style=display:flex><span>tar -xzvf file.tar.gz //解压tar.gz
+</span></span><span style=display:flex><span>tar -xjvf file.tar.bz2   //解压 tar.bz2
+</span></span><span style=display:flex><span>tar -xZvf file.tar.Z   //解压tar.Z
+</span></span><span style=display:flex><span>unrar e file.rar //解压rar
+</span></span><span style=display:flex><span>unzip file.zip //解压zip
+</span></span></code></pre></div><p>6.总结</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>1、*.tar 用 tar -xvf 解压
+</span></span><span style=display:flex><span>2、*.gz 用 gzip -d或者gunzip 解压
+</span></span><span style=display:flex><span>3、*.tar.gz和*.tgz 用 tar -xzf 解压
+</span></span><span style=display:flex><span>4、*.bz2 用 bzip2 -d或者用bunzip2 解压
+</span></span><span style=display:flex><span>5、*.tar.bz2用tar -xjf 解压
+</span></span><span style=display:flex><span>6、*.Z 用 uncompress 解压
+</span></span><span style=display:flex><span>7、*.tar.Z 用tar -xZf 解压
+</span></span><span style=display:flex><span>8、*.rar 用 unrar e解压
+</span></span><span style=display:flex><span>9、*.zip 用 unzip 解压
+</span></span></code></pre></div><h2 id=5-linux下动态查看日志>5. linux下动态查看日志</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>tail -f fileName
+</span></span></code></pre></div><h2 id=6-服务自启动>6. 服务自启动</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#f92672>[</span>root@localhost ~<span style=color:#f92672>]</span>chkconfig smb on
+</span></span><span style=display:flex><span><span style=color:#75715e>#or</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>[</span>root@localhost ~<span style=color:#f92672>]</span><span style=color:#75715e># vi /etc/rc.local</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#!/bin/sh</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># This script will be executed *after* all the other init scripts.</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># You can put your own initialization stuff in here if you don&#39;t</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># want to do the full Sys V style init stuff.</span>
+</span></span><span style=display:flex><span>service smb start
+</span></span></code></pre></div><h2 id=7网卡配置>7.网卡配置</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>ifdown eth3 <span style=color:#f92672>&amp;&amp;</span> ifup eth3
+</span></span><span style=display:flex><span>service network restart
+</span></span></code></pre></div><h2 id=8vi编辑器の操作>8.vi编辑器の操作</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>a   //在当前字符后添加文本
+</span></span><span style=display:flex><span>A   //在行末添加文本
+</span></span><span style=display:flex><span>i   //在当前字符前插入文本
+</span></span><span style=display:flex><span>I   //在当前行首插入文本
+</span></span><span style=display:flex><span>o   //在当前行后面插入一空行
+</span></span><span style=display:flex><span>O   //在当前行前面插入一空行
+</span></span><span style=display:flex><span>/字符串 //往下查找字符串
+</span></span><span style=display:flex><span>		n   //往下跳到下一个匹配位置
+</span></span><span style=display:flex><span>		N   //往上跳到下一个匹配位置
+</span></span><span style=display:flex><span>?字符串 //往上匹配字符串（与<span style=color:#e6db74>&#39;/字符串&#39;</span>操作相反）
+</span></span><span style=display:flex><span>p   //粘贴文本操作，用于将缓存区的内容粘贴到当前光标所在位置的下方
+</span></span><span style=display:flex><span>P   //粘贴文本操作，用于将缓存区的内容粘贴到当前光标所在位置的上方
+</span></span><span style=display:flex><span>Ctrl+u  //向文件首翻半屏
+</span></span><span style=display:flex><span>Ctrl+d  //向文件尾翻半屏
+</span></span><span style=display:flex><span>Ctrl+f  //向文件尾翻一屏
+</span></span><span style=display:flex><span>Ctrl+b  //向文件首翻一屏；
+</span></span><span style=display:flex><span>Esc     //从编辑模式切换到命令模式；
+</span></span><span style=display:flex><span>ZZ      //命令模式下保存当前文件所做的修改后退出vi；
+</span></span><span style=display:flex><span>:行号   //光标跳转到指定行的行首；
+</span></span><span style=display:flex><span>:$      //光标跳转到最后一行的行首；
+</span></span><span style=display:flex><span>x或X    //删除一个字符，x删除光标后的，而X删除光标前的；
+</span></span><span style=display:flex><span>D       //删除从当前光标到光标所在行尾的全部字符；
+</span></span><span style=display:flex><span>dd      //删除光标行正行内容；
+</span></span><span style=display:flex><span>ndd     //删除当前行及其后n-1行；
+</span></span><span style=display:flex><span>nyy     //当前行及其下n行的内容保存到寄存器？中，其中？为一个字母，n为一个数字；
+</span></span><span style=display:flex><span>gg      //让光标移到首行，在vim才有效，vi中无效
+</span></span><span style=display:flex><span>G       //光标移到最后一行
+</span></span><span style=display:flex><span>V       //是进入Visual<span style=color:#f92672>(</span>可视）模式
+</span></span><span style=display:flex><span>dG      //全部删除
+</span></span><span style=display:flex><span>ggyG    //全部复制
+</span></span><span style=display:flex><span>ggVG    //全选
+</span></span><span style=display:flex><span>		d       //删除选中
+</span></span><span style=display:flex><span>		y       //复制选中内容到0号寄存器
+</span></span><span style=display:flex><span><span style=color:#e6db74>&#34;+y     //复制选中内容到＋寄存器，也就是系统的剪贴板，供其他程序用
+</span></span></span><span style=display:flex><span><span style=color:#e6db74>gg&#34;</span>+yG  //要复制到别的地方，用 <span style=color:#e6db74>&#34;+y 来复制
+</span></span></span></code></pre></div><h2 id=9时间戳>9.时间戳</h2><pre tabindex=0><code>date    //获取当前系统时间
+date -d &#39;@1526973325&#39;   //将时间戳转换为时间
+</code></pre><h2 id=10文件比较之diff>10.文件比较之&rsquo;diff'</h2><h2 id=11-linux-从一个ip机器跳转至另一ip机器-ssh>11. linux 从一个IP机器跳转至另一IP机器: ssh</h2><p>ssh – OpenSSH remote login client</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>$ man ssh
+</span></span><span style=display:flex><span>	NAME
+</span></span><span style=display:flex><span>	     ssh – OpenSSH remote login client
+</span></span><span style=display:flex><span>	
+</span></span><span style=display:flex><span>	SYNOPSIS
+</span></span><span style=display:flex><span>	     ssh <span style=color:#f92672>[</span>-46AaCfGgKkMNnqsTtVvXxYy<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-B bind_interface<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-b bind_address<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-c cipher_spec<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-D <span style=color:#f92672>[</span>bind_address:<span style=color:#f92672>]</span>port<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-E log_file<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-e escape_char<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-F configfile<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-I pkcs11<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-i identity_file<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-J destination<span style=color:#f92672>]</span>
+</span></span><span style=display:flex><span>	         <span style=color:#f92672>[</span>-L address<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-l login_name<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-m mac_spec<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-O ctl_cmd<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-o option<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-p port<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-Q query_option<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-R address<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-S ctl_path<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-W host:port<span style=color:#f92672>]</span> <span style=color:#f92672>[</span>-w local_tun<span style=color:#f92672>[</span>:remote_tun<span style=color:#f92672>]]</span> destination <span style=color:#f92672>[</span>command <span style=color:#f92672>[</span>argument ...<span style=color:#f92672>]]</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 示例</span>
+</span></span><span style=display:flex><span>ssh username@IP
+</span></span><span style=display:flex><span>password：
+</span></span></code></pre></div><h2 id=12-linux系统间的文件目录传输>12. linux系统间的文件（目录）传输</h2><ul><li>命令：scp 选项 参数</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>scp <span style=color:#e6db74>&#34;文件名&#34;</span>  <span style=color:#e6db74>&#34;用户名@计算机IP或者计算机名称:远程路径&#34;</span>      //将本地文件拷贝到远程
+</span></span><span style=display:flex><span>scp -r <span style=color:#e6db74>&#34;目录名&#34;</span>  <span style=color:#e6db74>&#34;用户名@计算机IP或者计算机名称:远程路径&#34;</span>   //将本地目录拷贝到远程
+</span></span><span style=display:flex><span>scp <span style=color:#e6db74>&#34;用户名@计算机IP或者计算机名称:文件名&#34;</span>  <span style=color:#e6db74>&#34;本地路径&#34;</span>      //从远程将文件拷回本地
+</span></span><span style=display:flex><span>scp -r <span style=color:#e6db74>&#34;用户名@计算机IP或者计算机名称:目录名&#34;</span>  <span style=color:#e6db74>&#34;本地路径&#34;</span>   //从远程将目录拷回本地
+</span></span><span style=display:flex><span>    -a	尽可能将档案状态、权限等资料都照原状予以复制
+</span></span><span style=display:flex><span>    -r	若 source 中含有目录名，则将目录下之档案亦皆依序拷贝至目的地
+</span></span><span style=display:flex><span>    -f	若目的地已经有相同档名的档案存在，则在复制前先予以删除再行复制
+</span></span><span style=display:flex><span>    -v	和大多数 linux 命令中的 -v 意思一样 , 用来显示进度 . 可以用来查看连接 , 认证 , 或是配置错误
+</span></span><span style=display:flex><span>    -C	使能压缩选项
+</span></span><span style=display:flex><span>    -P	选择端口 . 注意 -p 已经被 rcp 使用
+</span></span><span style=display:flex><span>    -4	强行使用 IPV4 地址
+</span></span><span style=display:flex><span>    -6	强行使用 IPV6 地址
+</span></span></code></pre></div><h2 id=13-linux-centos7-关于防火墙操作>13. linux centos7 关于防火墙操作</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#75715e># 在root权限下查看防火墙状态。 </span>
+</span></span><span style=display:flex><span>systemctl status firewalld
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 临时关闭防火墙命令。重启电脑后，防火墙自动起来。 </span>
+</span></span><span style=display:flex><span>systemctl stop firewalld
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 永久关闭防火墙命令。重启后，防火墙不会自动启动。 </span>
+</span></span><span style=display:flex><span>systemctl disable firewalld
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 打开防火墙命令。 </span>
+</span></span><span style=display:flex><span>systemctl enable firewalld
+</span></span></code></pre></div></div></article><hr><div class=post-info><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg><span class=tag><a href=https://hesoong.github.io/tags/linux/>linux</a></span></p><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6A2 2 0 004 4v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>2389 Words</p><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2019-01-30 00:00</p></div><div class=pagination><div class=pagination__buttons><span class="button previous"><a href=https://hesoong.github.io/posts/mongo%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/><span class=button__icon>←</span>
+<span class=button__text>高可用性的mongo集群搭建</span></a></span>
+<span class="button next"><a href=https://hesoong.github.io/posts/java-deployment-under-linux/><span class=button__text>部署｜linux下java环境部署</span>
+<span class=button__icon>→</span></a></span></div></div></main></div><footer class=footer><div class=footer__inner><div class=footer__content><span>Copyright &copy; 2025</span>
+<span><a href=https://hesoong.github.io>Song</a></span>
+<span><a href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank rel=noopener>CC BY-NC 4.0</a></span></div></div><div class=footer__inner><div class=footer__content><span>Powered by <a href=http://gohugo.io>Hugo</a></span>
+<span>Theme made with <a href=https://atlialp.com/>rhazdon</a></span></div></div></footer></div><script type=text/javascript src=/bundle.min.205d491810c28f95aa953fae884e1c27abe13fdf93ec63b882d0036b248d4a6282eb2d134e4e7225c6ad6e86db87b08488a361ca4a7383d01fcff43f3d57b9c3.js integrity="sha512-IF1JGBDCj5WqlT+uiE4cJ6vhP9+T7GO4gtADaySNSmKC6y0TTk5yJcatbobbh7CEiKNhykpzg9Afz/Q/PVe5ww=="></script>
+<script src=/js/anchorforid.js></script>
+<script src=/js/main.js></script></body></html>

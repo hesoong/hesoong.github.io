@@ -1,0 +1,1629 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Song's Blog</title><link>https://hesoong.github.io/posts/</link><description>Recent content in Posts on Song's Blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>Mr.heesong@gmail.com (Song)</managingEditor><webMaster>Mr.heesong@gmail.com (Song)</webMaster><copyright>&lt;a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0&lt;/a></copyright><lastBuildDate>Mon, 23 Dec 2024 14:40:18 +0800</lastBuildDate><atom:link href="https://hesoong.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Leetcode(系列)</title><link>https://hesoong.github.io/posts/leetcode/</link><pubDate>Thu, 24 Aug 2023 13:57:05 +0800</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/leetcode/</guid><description>Leetcode 是一个在线平台，为软件工程师和开发人员提供编码挑战和面试准备资源。 刷题之前可以先看看这里面的topic：explore/learn</description><content type="html"><![CDATA[<p><a href="https://leetcode.com/">Leetcode</a> 是一个在线平台，为软件工程师和开发人员提供编码挑战和面试准备资源。
+刷题之前可以先看看这里面的topic：<a href="https://leetcode.com/explore/learn">explore/learn</a></p>
+]]></content></item><item><title>设计模式(系列)</title><link>https://hesoong.github.io/posts/designpattern/</link><pubDate>Sun, 03 May 2020 13:19:31 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/designpattern/</guid><description>设计模式（Design pattern）代表了最佳的实践，通常被有经验的面向对象的软件开发人员所采用。</description><content type="html">&lt;p>设计模式（Design pattern）代表了最佳的实践，通常被有经验的面向对象的软件开发人员所采用。&lt;/p></content></item><item><title>报错 | PKIX path building failed</title><link>https://hesoong.github.io/posts/https_cert_trust/</link><pubDate>Mon, 23 Dec 2024 14:40:18 +0800</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/https_cert_trust/</guid><description>我们在开发过程中经常会遇到https 请求失败的问题：PKIX path building failed，这往往是由于网站使用自签证书，不是官方证书授权机构授权的证书，</description><content type="html"><![CDATA[<blockquote>
+<p>我们在开发过程中经常会遇到https 请求失败的问题：PKIX path building failed，这往往是由于网站使用自签证书，不是官方证书授权机构授权的证书，在请求加密过程中证书验证失败导致。详细如下报错：</p>
+</blockquote>
+<pre tabindex="0"><code class="language-log" data-lang="log">Caused by: javax.net.ssl.SSLHandshakeException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+	at java.base/sun.security.ssl.Alert.createSSLException(Alert.java:131)
+	at java.base/sun.security.ssl.TransportContext.fatal(TransportContext.java:369)
+	at java.base/sun.security.ssl.TransportContext.fatal(TransportContext.java:312)
+	at java.base/sun.security.ssl.TransportContext.fatal(TransportContext.java:307)
+...
+</code></pre><p>那么接下来我们来总结下解决这个问题的几个方法：
+首先得下载证书 参考如下图
+<img src="export_cert.png" alt=""></p>
+<h3 id="1-将证书添加到本地jvm的信任存储库">1. 将证书添加到本地JVM的信任存储库</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>keytool -import -trustcacerts -keystore <span style="color:#e6db74">&#34;%JAVA_HOME%\jre\lib\security\cacerts&#34;</span> -storepass changeit -alias <span style="color:#e6db74">&#34;your alias&#34;</span> -import <span style="color:#e6db74">&#34;path_to_cert_file&#34;</span> 
+</span></span></code></pre></div><p>导入成功后重启应用即可。</p>
+<h3 id="2-使用自定义信任库">2. 使用自定义信任库</h3>
+<p>可以将证书导入到一个自定义的证书库（参考上面，keystore后面指定你自定义路径），然后通过代码指定你的信任库文件</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">setProperty</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;javax.net.ssl.trustStore&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;/path/to/cert/cacerts&#34;</span><span style="color:#f92672">);</span>  
+</span></span><span style="display:flex;"><span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">setProperty</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;javax.net.ssl.trustStorePassword&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;changeit&#34;</span><span style="color:#f92672">);</span>
+</span></span></code></pre></div><p>或者是通过程序启动JVM参数</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>-Djavax.net.ssl.trustStore <span style="color:#75715e"># 指定 TrustStore 文件的路径。</span>
+</span></span><span style="display:flex;"><span>-Djavax.net.ssl.trustStorePassword <span style="color:#75715e"># 指定 TrustStore 文件的密码。</span>
+</span></span><span style="display:flex;"><span>-Djavax.net.ssl.trustStoreType <span style="color:#75715e">#指定 TrustStore 文件的类型，默认是 `JKS`。其他常见类型包括 `PKCS12`</span>
+</span></span></code></pre></div><p>还有一种，如果项目使用SpringBoot， 可以通过在配置文件使用<code>server.ssl.trust-store</code> <code>server.ssl.trust-store-password</code> 来指定，但是我没有成功。</p>
+]]></content></item><item><title>SSL证书之acme</title><link>https://hesoong.github.io/posts/ssl-%E4%B9%8B%E7%94%B3%E8%AF%B7%E8%AF%81%E4%B9%A6/</link><pubDate>Fri, 22 Sep 2023 10:23:34 +0800</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/ssl-%E4%B9%8B%E7%94%B3%E8%AF%B7%E8%AF%81%E4%B9%A6/</guid><description>安装ACME curl https://get.acme.sh | sh # 安装socat： apt install socat # 添加软链接： ln -s /root/.acme.sh/acme.sh /usr/local/bin/acme.sh # 注册账号： acme.sh --register-account -m my@example.com # 开放80端口： ufw allow 80 申请证书 申请证书前需要先确保80</description><content type="html"><![CDATA[<h2 id="安装acme">安装ACME</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>curl https://get.acme.sh | sh
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装socat：</span>
+</span></span><span style="display:flex;"><span>apt install socat
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 添加软链接：</span>
+</span></span><span style="display:flex;"><span>ln -s /root/.acme.sh/acme.sh /usr/local/bin/acme.sh
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 注册账号： </span>
+</span></span><span style="display:flex;"><span>acme.sh --register-account -m my@example.com
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 开放80端口：</span>
+</span></span><span style="display:flex;"><span>ufw allow <span style="color:#ae81ff">80</span>
+</span></span></code></pre></div><h2 id="申请证书">申请证书</h2>
+<p>申请证书前需要先确保<code>80</code>端口处于打开状态。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 申请证书</span>
+</span></span><span style="display:flex;"><span>acme.sh --issue -d <span style="color:#e6db74">`</span>your domain<span style="color:#e6db74">`</span> --standalone -k ec-256
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装证书： </span>
+</span></span><span style="display:flex;"><span>acme.sh --installcert -d <span style="color:#e6db74">`</span>your domain<span style="color:#e6db74">`</span> --ecc <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>--key-file /root/trojan/server.key <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>--fullchain-file /root/trojan/server.crt
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 如果默认CA无法颁发，则可以切换下列CA： </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 切换 Let’s Encrypt：</span>
+</span></span><span style="display:flex;"><span>acme.sh --set-default-ca --server letsencrypt 
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 切换 Buypass：</span>
+</span></span><span style="display:flex;"><span>acme.sh --set-default-ca --server buypass 
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 切换 ZeroSSL：</span>
+</span></span><span style="display:flex;"><span>acme.sh --set-default-ca --server zerossl
+</span></span></code></pre></div>]]></content></item><item><title>SSO 笔记</title><link>https://hesoong.github.io/posts/sso/</link><pubDate>Wed, 20 Sep 2023 15:58:07 +0800</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/sso/</guid><description>What is SSO? Single sign-on (SSO) is an authentication method that enables users to securely authenticate with multiple applications and websites by using just one set of credentials. How Does Single Sign-On (SSO) protocol Work? There are two commonly used SSO protocols namely SAML and OAuth2. OAuth2 Role OAuth defines four roles: resource owner An entity capable of granting access to a protected resource. When the resource owner is a</description><content type="html"><![CDATA[<h2 id="what-is-sso">What is SSO?</h2>
+<p>Single sign-on (SSO) is an authentication method that enables users to securely authenticate with multiple applications and websites by using just one set of credentials.</p>
+<hr>
+<h2 id="how-does-single-sign-on-sso-protocol-work">How Does Single Sign-On (SSO) protocol Work?</h2>
+<p>There are two commonly used SSO protocols namely SAML and OAuth2.</p>
+<h3 id="oauth2">OAuth2</h3>
+<h4 id="role">Role</h4>
+<p>OAuth defines four roles:</p>
+<ol>
+<li>resource owner</li>
+</ol>
+<blockquote>
+<p>An entity capable of granting access to a protected resource.
+When the resource owner is a person, it is referred to as an
+end-user.</p>
+</blockquote>
+<ol start="2">
+<li>resource server</li>
+</ol>
+<blockquote>
+<p>The server hosting the protected resources, capable of accepting
+and responding to protected resource requests using access tokens.</p>
+</blockquote>
+<ol start="3">
+<li>client</li>
+</ol>
+<blockquote>
+<p>An application making protected resource requests on behalf of the
+resource owner and with its authorization.  The term &ldquo;client&rdquo; does
+not imply any particular implementation characteristics (e.g.,
+whether the application executes on a server, a desktop, or other
+devices).</p>
+</blockquote>
+<ol start="4">
+<li>authorization server</li>
+</ol>
+<blockquote>
+<p>The server issuing access tokens to the client after successfully
+authenticating the resource owner and obtaining authorization.</p>
+</blockquote>
+<h4 id="protocol-flow">Protocol Flow</h4>
+<p>Please refer to this link for the OAuth 2.0 authorization framework details: <a href="https://datatracker.ietf.org/doc/html/rfc6749#section-4.1">RFC 6749</a></p>
+<p>The main process as below:</p>
+<p><img src="oauth2flow.png" alt="Oauth2 Flow">
+The abstract OAuth 2.0 flow illustrated in above figure describes the interaction between the four roles and includes the following steps:</p>
+<p><strong>(A)</strong> - The client requests authorization from the resource owner.  The authorization request can be made directly to the resource owner(as shown), or preferably indirectly via the authorization
+server as an intermediary.</p>
+<p><strong>(B)</strong> - The client receives an authorization grant, which is a credential representing the resource owner&rsquo;s authorization, expressed using one of four grant types defined in this specification or using an extension grant type.  The authorization grant type depends on the method used by the client to request authorization and the types supported by the authorization server.</p>
+<p><strong>(C)</strong> - The client requests an access token by authenticating with the authorization server and presenting the authorization grant.</p>
+<p><strong>(D)</strong> - The authorization server authenticates the client and validates the authorization grant, and if valid, issues an access token.</p>
+<p><strong>(E)</strong> - The client requests the protected resource from the resource server and authenticates by presenting the access token.</p>
+<p><strong>(F)</strong> - The resource server validates the access token, and if valid, serves the request.</p>
+<h4 id="obtaining-authorization">Obtaining Authorization</h4>
+<p>To request an access token, the client obtains authorization from the resource owner.  The authorization is expressed in the form of an authorization grant, which the client uses to request the access token.  OAuth defines four grant types:</p>
+<ol>
+<li><em><strong>authorization code</strong></em></li>
+<li><em><strong>implicit</strong></em></li>
+<li><em><strong>resource owner password credentials</strong></em></li>
+<li><em><strong>client credentials</strong></em>.
+It also provides an extension mechanism for defining additional grant types.</li>
+</ol>
+<h4 id="authorization-code-grant-flow">Authorization Code Grant Flow</h4>
+<blockquote>
+<p>The authorization code grant type is used to obtain both access
+tokens and refresh tokens and is optimized for confidential clients.
+Since this is a redirection-based flow, the client must be capable of
+interacting with the resource owner&rsquo;s user-agent (typically a web
+browser) and capable of receiving incoming requests (via redirection)
+from the authorization server.</p>
+</blockquote>
+<p><img src="oauth2authcode.png" alt="Authorization Code Grant Flow">
+The flow illustrated in Figure 3 includes the following steps:</p>
+<p><strong>(A)</strong> - The client initiates the flow by directing the resource owner&rsquo;s user-agent to the authorization endpoint.  The client includes its client identifier, requested scope, local state, and a redirection URI to which the authorization server will send the user-agent back once access is granted (or denied).</p>
+<p><strong>(B)</strong> - The authorization server authenticates the resource owner (via the user-agent) and establishes whether the resource owner grants or denies the client&rsquo;s access request.</p>
+<p><strong>(C)</strong> - Assuming the resource owner grants access, the authorization server redirects the user-agent back to the client using the redirection URI provided earlier (in the request or during client registration).  The redirection URI includes an authorization code and any local state provided by the client earlier.</p>
+<p><strong>(D)</strong> - The client requests an access token from the authorization server&rsquo;s token endpoint by including the authorization code received in the previous step.  When making the request, the client authenticates with the authorization server.  The client includes the redirection URI used to obtain the authorization code for verification.</p>
+<p><strong>(E)</strong> - The authorization server authenticates the client, validates the authorization code, and ensures that the redirection URI received matches the URI used to redirect the client in step (C).  If valid, the authorization server responds back with an access token and, optionally, a refresh token.</p>
+<h3 id="saml-20">SAML 2.0</h3>
+<p>The SAML 2.0(Security Assertion Markup Language) Login feature provides an application with the capability to act as a SAML 2.0 Relying Party, having users log in to the application by using their existing account at a SAML 2.0 Asserting Party (Okta, ADFS, etc).</p>
+<h4 id="role-1">Role</h4>
+<ol>
+<li>Principal</li>
+<li>Service Provider(SP) - web service(like EDL)</li>
+<li>Identity Provider(IdP) -  Microsoft, AWS &hellip;</li>
+</ol>
+<h4 id="main-process">Main Process</h4>
+<p>The main process as below:
+<img src="samlflow.png" alt="SAML2-flow"></p>
+<ol>
+<li>First, a user makes an unauthenticated request to the resource <code>/private</code> for which it is not authorized.</li>
+<li>Spring Security’s <a href="https://docs.spring.io/spring-security/reference/5.6.0-RC1/servlet/authorization/authorize-requests.html#servlet-authorization-filtersecurityinterceptor"><code>FilterSecurityInterceptor</code></a> indicates that the unauthenticated request is <em>Denied</em> by throwing an <code>AccessDeniedException</code>.</li>
+<li>Since the user lacks authorization, the <a href="https://docs.spring.io/spring-security/reference/5.6.0-RC1/servlet/architecture.html#servlet-exceptiontranslationfilter"><code>ExceptionTranslationFilter</code></a> initiates <em>Start Authentication</em>. The configured <a href="https://docs.spring.io/spring-security/reference/5.6.0-RC1/servlet/authentication/architecture.html#servlet-authentication-authenticationentrypoint"><code>AuthenticationEntryPoint</code></a> is an instance of <a href="https://docs.spring.io/spring-security/site/docs/5.6.0-RC1/api/org/springframework/security/web/authentication/LoginUrlAuthenticationEntryPoint.html"><code>LoginUrlAuthenticationEntryPoint</code></a> which redirects to <a href="https://docs.spring.io/spring-security/reference/5.6.0-RC1/servlet/saml2/index.html#servlet-saml2login-sp-initiated-factory">the <code>&lt;saml2:AuthnRequest&gt;</code> generating endpoint</a>, <code>Saml2WebSsoAuthenticationRequestFilter</code>. Or, if you’ve <a href="https://docs.spring.io/spring-security/reference/5.6.0-RC1/servlet/saml2/index.html#servlet-saml2login-relyingpartyregistrationrepository">configured more than one asserting party</a>, it will first redirect to a picker page.</li>
+<li>Next, the <code>Saml2WebSsoAuthenticationRequestFilter</code> creates, signs, serializes, and encodes a <code>&lt;saml2:AuthnRequest&gt;</code> using its configured <a href="https://docs.spring.io/spring-security/reference/5.6.0-RC1/servlet/saml2/index.html#servlet-saml2login-sp-initiated-factory"><code>Saml2AuthenticationRequestFactory</code></a>.</li>
+<li>Then, the browser takes this <code>&lt;saml2:AuthnRequest&gt;</code> and presents it to the asserting party. The asserting party attempts to authentication the user. If successful, it will return a <code>&lt;saml2:Response&gt;</code> back to the browser.</li>
+<li>The browser then POSTs the <code>&lt;saml2:Response&gt;</code> to the assertion consumer service endpoint.</li>
+</ol>
+<hr>
+<h2 id="usage-in-javaspring-security">Usage in Java(Spring Security)</h2>
+<p>Please refer to this link for details: <a href="https://docs.spring.io/spring-security/reference/servlet/oauth2/login/core.html">Spring Security</a></p>
+]]></content></item><item><title>Keytool 命令</title><link>https://hesoong.github.io/posts/keytool%E5%91%BD%E4%BB%A4/</link><pubDate>Mon, 21 Aug 2023 09:55:51 +0800</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/keytool%E5%91%BD%E4%BB%A4/</guid><description>介绍 Keytool 是一个Java 数字证书的管理工具， Keytool将密钥（key）和证书（certificates）存在一个称为keystore的文件中</description><content type="html"><![CDATA[<h2 id="介绍">介绍</h2>
+<hr>
+<p><code>Keytool</code> 是一个Java 数字证书的管理工具， <code>Keytool</code>将密钥（key）和证书（certificates）存在一个称为keystore的文件中 在keystore里，包含两种数据：</p>
+<ol>
+<li>密钥实体（Key entity）——密钥（secret key）又或者是私钥和配对公钥（采用非对称加密）</li>
+<li>可信任的证书实体（trusted certificate entries）——只包含公钥</li>
+</ol>
+<h2 id="命令">命令</h2>
+<h3 id="help-information">Help information</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>✗ keytool -h                                                                                                                       
+</span></span><span style="display:flex;"><span>Key and Certificate Management Tool
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Commands:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> -certreq            Generates a certificate request
+</span></span><span style="display:flex;"><span> -changealias        Changes an entry<span style="color:#960050;background-color:#1e0010">&#39;</span>s alias
+</span></span><span style="display:flex;"><span> -delete             Deletes an entry
+</span></span><span style="display:flex;"><span> -exportcert         Exports certificate
+</span></span><span style="display:flex;"><span> -genkeypair         Generates a key pair
+</span></span><span style="display:flex;"><span> -genseckey          Generates a secret key
+</span></span><span style="display:flex;"><span> -gencert            Generates certificate from a certificate request
+</span></span><span style="display:flex;"><span> -importcert         Imports a certificate or a certificate chain
+</span></span><span style="display:flex;"><span> -importpass         Imports a password
+</span></span><span style="display:flex;"><span> -importkeystore     Imports one or all entries from another keystore
+</span></span><span style="display:flex;"><span> -keypasswd          Changes the key password of an entry
+</span></span><span style="display:flex;"><span> -list               Lists entries in a keystore
+</span></span><span style="display:flex;"><span> -printcert          Prints the content of a certificate
+</span></span><span style="display:flex;"><span> -printcertreq       Prints the content of a certificate request
+</span></span><span style="display:flex;"><span> -printcrl           Prints the content of a CRL file
+</span></span><span style="display:flex;"><span> -storepasswd        Changes the store password of a keystore
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Use <span style="color:#e6db74">&#34;keytool -?, -h, or --help&#34;</span> <span style="color:#66d9ef">for</span> this help message
+</span></span><span style="display:flex;"><span>Use <span style="color:#e6db74">&#34;keytool -command_name --help&#34;</span> <span style="color:#66d9ef">for</span> usage of command_name.
+</span></span><span style="display:flex;"><span>Use the -conf &lt;url&gt; option to specify a pre-configured options file.
+</span></span></code></pre></div><h3 id="keytool--list">keytool -list</h3>
+<blockquote>
+<p>列出密钥存储库中的证书信息</p>
+</blockquote>
+<h4 id="help-information-1">Help information</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>✗ keytool -list -h
+</span></span><span style="display:flex;"><span>keytool -list <span style="color:#f92672">[</span>OPTION<span style="color:#f92672">]</span>...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Lists entries in a keystore
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Options:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> -rfc                    output in RFC style
+</span></span><span style="display:flex;"><span> -alias &lt;alias&gt;          alias name of the entry to process
+</span></span><span style="display:flex;"><span> -keystore &lt;keystore&gt;    keystore name
+</span></span><span style="display:flex;"><span> -cacerts                access the cacerts keystore
+</span></span><span style="display:flex;"><span> -storepass &lt;arg&gt;        keystore password
+</span></span><span style="display:flex;"><span> -storetype &lt;type&gt;       keystore type
+</span></span><span style="display:flex;"><span> -providername &lt;name&gt;    provider name
+</span></span><span style="display:flex;"><span> -addprovider &lt;name&gt;     add security provider by name <span style="color:#f92672">(</span>e.g. SunPKCS11<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">[</span>-providerarg &lt;arg&gt;<span style="color:#f92672">]</span>    configure argument <span style="color:#66d9ef">for</span> -addprovider
+</span></span><span style="display:flex;"><span> -providerclass &lt;class&gt;  add security provider by fully-qualified class name
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">[</span>-providerarg &lt;arg&gt;<span style="color:#f92672">]</span>    configure argument <span style="color:#66d9ef">for</span> -providerclass
+</span></span><span style="display:flex;"><span> -providerpath &lt;list&gt;    provider classpath
+</span></span><span style="display:flex;"><span> -v                      verbose output
+</span></span><span style="display:flex;"><span> -protected              password through protected mechanism
+</span></span></code></pre></div><h4 id="demo">Demo</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 查看证书列表</span>
+</span></span><span style="display:flex;"><span>keytool -list -keystore <span style="color:#f92672">{</span>path<span style="color:#f92672">}</span>/cacerts
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 查看证书详细信息 以列表展示</span>
+</span></span><span style="display:flex;"><span>keytool -list -keystore -v <span style="color:#f92672">{</span>path<span style="color:#f92672">}</span>/cacerts 
+</span></span></code></pre></div><h3 id="keytool--import">keytool -import</h3>
+<blockquote>
+<p>证书导入</p>
+</blockquote>
+<p><code>certAlias</code> 证书别名, 不能重复 不区分大小写</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 导入证书</span>
+</span></span><span style="display:flex;"><span>keytool -import -alias <span style="color:#f92672">{</span>certAlias<span style="color:#f92672">}</span> -file <span style="color:#e6db74">&#39;{path}/certfile.crt&#39;</span>  -keystore <span style="color:#e6db74">&#39;{path}/java/openjdk/lib/security/cacerts&#39;</span>
+</span></span></code></pre></div><h3 id="keytool--export">keytool -export</h3>
+<blockquote>
+<p>证书导出</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>keytool -exportcert <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span> -rfc <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span> -alias example <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span> -file cert.pem <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span> -keystore example.p12 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span> -storepass changeit <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span> -storetype PKCS12 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span> -v 
+</span></span></code></pre></div><ul>
+<li><code>-rfc</code> : Will output in PEM format as defined by <a href="https://tools.ietf.org/html/rfc1421">RFC 1421</a>.</li>
+<li><code>-alias</code> : The alias of the entry encapsulated in the keystore. The chosen value should enhance the readability of the keystore entries, especially when the keystore contains multiple entries.</li>
+<li><code>-file</code> : The file to contain the exported X.509 certificate.</li>
+<li><code>-keystore</code> : The filename of the keystore.</li>
+<li><code>-storepass</code> : The current keystore password. We recommend leaving this option off and letting keytool prompt you instead of writing your password in plain text here.</li>
+<li><code>-storetype</code> : Recommended keystore types include PKCS12 and JKS. In this case, the keystore was of type PKCS12.</li>
+<li><code>-v</code> : Verbose output.</li>
+</ul>
+]]></content></item><item><title>部署｜Openwrt + Tplink ACAP</title><link>https://hesoong.github.io/posts/openwrt-tplink-acap-deploy/</link><pubDate>Sun, 04 Jun 2023 00:00:00 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/openwrt-tplink-acap-deploy/</guid><description>前言 最近想把家里网络升级一下 于是购置了一套Tplink APAC 组网设备 家里已有网络环境 光纤入户-&amp;gt; 一台N3540主路由（拨号&amp;amp;DHC</description><content type="html"><![CDATA[<h2 id="前言">前言</h2>
+<blockquote>
+<p>最近想把家里网络升级一下 于是购置了一套Tplink APAC 组网设备
+家里已有网络环境 光纤入户-&gt; 一台N3540主路由（拨号&amp;DHCP）-&gt; Redmi AC2100(桥接&amp; 提供wifi)
+主路由 192.168.100.1</p>
+</blockquote>
+<h2 id="组网">组网</h2>
+<ol>
+<li>家里所有设备在同一网段，正常上网（包括科学上网）</li>
+<li>商云App可以查看AP状态与管理所有AP</li>
+</ol>
+<h3 id="方案一tp-link-作为二级路由">方案一：TP-Link 作为二级路由</h3>
+<p>N3540仍然做主路由，Lan口接AC交换机的Wan口，AC Wan口自动获取Ip 或者静态IP都可，Lan口开启DHCP。</p>
+<ul>
+<li>优点：该方案是可用的，商云APP可以正常发现并管理AP设备，配置简单现有网络基础上不需要做太多的变化，只需替换原来的Redmi 路由器即可</li>
+<li>缺点：不满足我的需求1，主路由与AP不在同一网段。多一级路由对网络传输会有损耗也增加了网络的复杂度</li>
+</ul>
+<p>总结：该方案不推荐</p>
+<h3 id="方案二tp-link-ac-仅作为交换机使用">方案二：TP-Link AC 仅作为交换机使用</h3>
+<p>AC交换机先不接上游网络（Wan先不接线）Lan口连接所有AP,通过wifi或者网线设置AC,AC Wan口可不做设置或设置自动获取IP，AC Lan口设置静态IP（与主路由保持同一网段如：192.168.100.233）并关闭DHCP服务。N3540仍然做主路由，最后N3540Lan口接AC交换机的Lan口。</p>
+<ul>
+<li>优点：整个网络只有主路由提供DHCP服务，所以所有设备均在同一网段，且所有设备能正常上网并跑满带宽</li>
+<li>缺点：由于AC Wan口没有使用仅作为交换机，所有没有接入互联网不能使用商云APP(咨询了客服是这样解释的)也就不能通过商云app 管理AP,但是</li>
+</ul>
+<p>可以通过AC IP(192.168.100.233)进入网页UI进行查看网络情况
+总结：方案可行，没有强迫症对商云APP没有执念可以尝试</p>
+<h3 id="方案三n3540做旁路由也叫旁路网关">方案三：N3540做旁路由（也叫旁路网关）</h3>
+<p>经过前面两种方案的尝试，方案都并不完美，最终通过一番搜索与学习，最终决定将主路由用作旁路由，AC升级作为主路由。
+首先光猫网线出来直接接入ACWan口，进入路由器控制中心Wan口输入账号密码进行拨号,Lan口设置静态IP(如：192.168.100.233),开启DHCP.
+image.png
+N3540做旁路由Lan口接入AC Lan口，修改设置：</p>
+<ol>
+<li>Lan口选择静态地址（与AC主路由保持网段一致，如192.168.100.1）；网关设置成AC 主路由地址（192.168.100.233）这很重要。</li>
+<li>Lan口关闭DHCP服务</li>
+<li>进入防火墙，修改Lan 防火墙设置，勾选“IP 动态伪装”
+至此N3540设置完毕。至此N3540仅作为一个网络设备不会对整个网络有任何影响。连接APwifi 手机等设备也能正常上网，但是还不能科学上网。</li>
+</ol>
+<p>还要进行一部配置，将联网设备的网关指向旁路由。该配置有两种方式：非侵入式与侵入式</p>
+<ol>
+<li>非侵入式：联网设备进行联网配置，自动获取IP改为手动设置 需要特殊注意的是将网关配置成旁路由IP（即192.168.100.1）重新连接后即可上网。该方案优点就是可以控制哪些设备需要经旁路由。缺点就是比较麻烦 每个需要科学上网的设备都需要手动配置，</li>
+<li>侵入式：基于上面一种方案，该方案是将该配置通过DHCP下发给所有联网设备，在AC Lan口的DHCP配置中填入旁路由IP（即192.168.100.1）所有设备重新联网即可。该方案也有缺点，有侵入性，如果旁路由挂掉 整个网络即瘫痪（该场景应该很少）</li>
+</ol>
+<p>至此所有配置完成。</p>
+<ul>
+<li>优点：满足我的两点基本需求。所有设备正常上网，跑满带宽。商云APP 正常发现并管理AP设备</li>
+<li>缺点：配置稍微麻烦一点</li>
+</ul>
+<p>总结：目前是我的最佳解决方案，推荐。如果后续有方案变更再做更新。有小伙伴有更好的方式可进行讨论分享[emoji:抱拳]</p>
+]]></content></item><item><title>笔记｜Docker 笔记</title><link>https://hesoong.github.io/posts/docker/</link><pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/docker/</guid><description>一、Docker介绍 1. 下载Docker依赖的环境 # 想安装Docker，需要先将依赖的环境全部下载下来，就像Maven依赖JDK一样 yum -y install yum-utils device-mapper-persistent-data</description><content type="html"><![CDATA[<h2 id="一docker介绍">一、Docker介绍</h2>
+<hr>
+<h3 id="1-下载docker依赖的环境">1. 下载Docker依赖的环境</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 想安装Docker，需要先将依赖的环境全部下载下来，就像Maven依赖JDK一样</span>
+</span></span><span style="display:flex;"><span>yum -y install yum-utils device-mapper-persistent-data lvm2
+</span></span></code></pre></div><h3 id="2-指定docker镜像源">2. 指定Docker镜像源</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 默认下载Docker会去国外服务器下载，速度较慢，可以设置为阿里云镜像源，速度更快</span>
+</span></span><span style="display:flex;"><span>yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+</span></span></code></pre></div><h3 id="3-安装docker">3. 安装docker</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>yum makecache fast
+</span></span><span style="display:flex;"><span>yum -y install docker-ce
+</span></span></code></pre></div><h3 id="4-启动docker并测试">4. 启动Docker并测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>安装成功后，需要手动启动，设置为开机启动，并测试一下 Docker
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#启动docker服务</span>
+</span></span><span style="display:flex;"><span>systemctl start docker
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#设置开机自动启动</span>
+</span></span><span style="display:flex;"><span>systemctl enable docker
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#测试</span>
+</span></span><span style="display:flex;"><span>docker run hello-world
+</span></span></code></pre></div><h2 id="二-docker的中央仓库">二、 Docker的中央仓库</h2>
+<hr>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 1.Docker官方的中央仓库：这个仓库是镜像最全的，但是下载速度较慢。</span>
+</span></span><span style="display:flex;"><span>https://hub.docker.com/
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2.国内的镜像网站：网易蜂巢，daoCloud等，下载速度快，但是镜像相对不全。</span>
+</span></span><span style="display:flex;"><span>https://c.163yun.com/hub#/home 
+</span></span><span style="display:flex;"><span>http://hub.daocloud.io/ （推荐使用）
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3.在公司内部会采用私服的方式拉取镜像（添加配置）</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#需要创建 /etc/docker/daemon.json，并添加如下内容</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;registry-mirrors&#34;</span>:<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;https://registry.docker-cn.com&#34;</span><span style="color:#f92672">]</span>,
+</span></span><span style="display:flex;"><span> <span style="color:#e6db74">&#34;insecure-registries&#34;</span>:<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;ip:port&#34;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 重启两个服务</span>
+</span></span><span style="display:flex;"><span>systemctl daemon-reload
+</span></span><span style="display:flex;"><span>systemctl restart docker
+</span></span></code></pre></div><h2 id="三-镜像的操作">三、 镜像的操作</h2>
+<hr>
+<h3 id="1-拉取镜像">1. 拉取镜像</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 从中央仓库拉取镜像到本地</span>
+</span></span><span style="display:flex;"><span>docker pull 镜像名称<span style="color:#f92672">[</span>:tag<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 举个栗子:</span>
+</span></span><span style="display:flex;"><span>docker pull daocloud.io/library/tomcat:8.5.15-jre8
+</span></span></code></pre></div><h3 id="2-查看本地所有镜像">2. 查看本地所有镜像</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 查看本地已经安装过的镜像信息，包含标识，名称，版本，更新时间，大小</span>
+</span></span><span style="display:flex;"><span>docker images
+</span></span></code></pre></div><h3 id="3-删除本地镜像">3. 删除本地镜像</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 镜像会占用磁盘空间，可以直接手动删除，标识通过查看获取</span>
+</span></span><span style="display:flex;"><span>docker rmi 镜像的标识
+</span></span></code></pre></div><h3 id="4-镜像的导入导出">4. 镜像的导入导出</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 如果因为网络原因可以通过硬盘的方式传输镜像，虽然不规范，但是有效，但是这种方式导出的镜像名称和版本都是null，需要手动修改</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 将本地的镜像导出</span>
+</span></span><span style="display:flex;"><span>docker save -o 导出的路径 镜像id
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 加载本地的镜像文件</span>
+</span></span><span style="display:flex;"><span>docker load -i 镜像文件
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 修改镜像文件</span>
+</span></span><span style="display:flex;"><span>docker tag 镜像id 新镜像名称：版本
+</span></span></code></pre></div><h2 id="四-容器的操作">四、 容器的操作</h2>
+<hr>
+<h3 id="1-运行容器">1. 运行容器</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 运行容器需要定制具体镜像，如果镜像不存在，会直接下载</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#简单操作</span>
+</span></span><span style="display:flex;"><span>docker run 镜像的标识|镜像的名称<span style="color:#f92672">[</span>:tag<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#常用的参数</span>
+</span></span><span style="display:flex;"><span>docker run -d -p 宿主机端口:容器端口 --name 容器名称 镜像的标识|镜像名称<span style="color:#f92672">[</span>:tag<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#-d:代表后台运行容器</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#-p 宿主机端口:容器端口：为了映射当前Linux的端口和容器的端口</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#--name 容器名称:指定容器的名称</span>
+</span></span></code></pre></div><h3 id="2-查看正在运行的容器">2. 查看正在运行的容器</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 查看全部正在运行的容器信息</span>
+</span></span><span style="display:flex;"><span>docker ps <span style="color:#f92672">[</span>-qa<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#-a 查看全部的容器，包括没有运行</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#-q 只查看容器的标识</span>
+</span></span></code></pre></div><h3 id="3-查看容器日志">3. 查看容器日志</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 查看容器日志，以查看容器运行的信息</span>
+</span></span><span style="display:flex;"><span>docker logs -f 容器id
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#-f：可以滚动查看日志的最后几行</span>
+</span></span></code></pre></div><h3 id="4-进入容器的内部">4. 进入容器的内部</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 可以进入容器的内部进行操作</span>
+</span></span><span style="display:flex;"><span>docker exec -it 容器id bash
+</span></span></code></pre></div><h3 id="5-复制内容到容器">5. 复制内容到容器</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 将宿主机的文件复制到容器内部的指定目录</span>
+</span></span><span style="display:flex;"><span>docker cp 文件名称 容器id:容器内部路径
+</span></span></code></pre></div><h3 id="6-重启启动停止删除容器">6. 重启&amp;启动&amp;停止&amp;删除容器</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>容器的启动，停止，删除等操作，后续会经常使用到
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#重新启动容器</span>
+</span></span><span style="display:flex;"><span>docker restart 容器id
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#启动停止运行的容器</span>
+</span></span><span style="display:flex;"><span>docker start 容器id
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#停止指定的容器(删除容器前，需要先停止容器)</span>
+</span></span><span style="display:flex;"><span>docker stop 容器id
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#停止全部容器</span>
+</span></span><span style="display:flex;"><span>docker stop <span style="color:#66d9ef">$(</span>docker ps -qa<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#删除指定容器</span>
+</span></span><span style="display:flex;"><span>docker rm 容器id
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#删除全部容器</span>
+</span></span><span style="display:flex;"><span>docker rm <span style="color:#66d9ef">$(</span>docker ps -qa<span style="color:#66d9ef">)</span>
+</span></span></code></pre></div><h2 id="五dockerfile">五、Dockerfile</h2>
+<hr>
+<p>//todo</p>
+<h2 id="六docker-compose">六、Docker Compose</h2>
+<hr>
+<p>//todo</p>
+]]></content></item><item><title>Regex笔记</title><link>https://hesoong.github.io/posts/regex%E7%AC%94%E8%AE%B0/</link><pubDate>Sat, 12 Sep 2020 09:49:25 +0800</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/regex%E7%AC%94%E8%AE%B0/</guid><description>语法 1.普通字符 普通字符包括没有显式指定为元字符的所有可打印和不可打印字符。这包括所有大写和小写字母、所有数字、所有标点符号和一些其他符号。</description><content type="html"><![CDATA[<h2 id="语法">语法</h2>
+<h3 id="1普通字符">1.普通字符</h3>
+<p>普通字符包括没有显式指定为元字符的所有可打印和不可打印字符。这包括所有大写和小写字母、所有数字、所有标点符号和一些其他符号。</p>
+<h3 id="2非打印字符">2.非打印字符</h3>
+<p>非打印字符也可以是正则表达式的组成部分。下表列出了表示非打印字符的转义序列：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#ae81ff">\c</span>x    <span style="color:#75715e"># 匹配由x指明的控制字符。例如， \cM 匹配一个 Control-M 或回车符。x 的值必须为 A-Z 或 a-z 之一。否则，s将 c 视为一个原义的 &#39;c&#39; 字符。</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">\f</span>     <span style="color:#75715e">#匹配一个换页符。等价于 \x0c 和 \cL。</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">\n</span>     <span style="color:#75715e">#匹配一个换行符。等价于 \x0a 和 \cJ。</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">\r</span>     <span style="color:#75715e">#匹配一个回车符。等价于 \x0d 和 \cM。</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">\s</span>     <span style="color:#75715e">#匹配任何空白字符，包括空格、制表符、换页符等等。等价于 [ \f\n\r\t\v]。</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">\S</span>     <span style="color:#75715e">#匹配任何非空白字符。等价于 [^ \f\n\r\t\v]。</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">\t</span>     <span style="color:#75715e">#匹配一个制表符。等价于 \x09 和 \cI。</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">\v</span>     <span style="color:#75715e">#匹配一个垂直制表符。等价于 \x0b 和 \cK。</span>
+</span></span></code></pre></div><h3 id="3特殊字符">3.特殊字符</h3>
+<p>所谓特殊字符，就是一些有特殊含义的字符，如上面说的 runoo<em>b 中的</em>，简单的说就是表示任何字符串的意思。
+如果要查找字符串中的 <em>符号，则需要对</em>进行转义，即在其前加一个 : runo*ob 匹配 runo*ob。
+许多元字符要求在试图匹配它们时特别对待。若要匹配这些特殊字符，必须首先使字符&quot;转义&quot;，即，将反斜杠字符\ 放在它们前面。下表列出了正则表达式中的特殊字符：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$     <span style="color:#75715e">#匹配输入字符串的结尾位置。如果设置了 RegExp 对象的 Multiline 属性，则 $ 也匹配 &#34;\n&#34; 或 &#34;\r&#34;。要匹配 $ 字符本身，请使用 \$。</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">(</span> <span style="color:#f92672">)</span>   <span style="color:#75715e">#  标记一个子表达式的开始和结束位置。子表达式可以获取供以后使用。要匹配这些字符，请使用 \( 和 \)。</span>
+</span></span><span style="display:flex;"><span>*     <span style="color:#75715e">#匹配前面的子表达式零次或多次。要匹配 * 字符，请使用 \*。</span>
+</span></span><span style="display:flex;"><span>+     <span style="color:#75715e">#匹配前面的子表达式一次或多次。要匹配 + 字符，请使用 \+。</span>
+</span></span><span style="display:flex;"><span>.     <span style="color:#75715e">#匹配除换行符 \n 之外的任何单字符。要匹配 . ，请使用 \. 。</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>     <span style="color:#75715e">#标记一个中括号表达式的开始。要匹配 [，请使用 \[。</span>
+</span></span><span style="display:flex;"><span>?     <span style="color:#75715e">#匹配前面的子表达式零次或一次，或指明一个非贪婪限定符。要匹配 ? 字符，请使用 \?。</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">\ </span>    <span style="color:#75715e">#将下一个字符标记为或特殊字符、或原义字符、或向后引用、或八进制转义符。</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e">#例如，&#39;n&#39; 匹配字符 &#39;n&#39;。&#39;\n&#39; 匹配换行符。序列 &#39;\\&#39; 匹配 &#34;\&#34;，而 &#39;\(&#39; 则匹配 &#34;(&#34;。</span>
+</span></span><span style="display:flex;"><span>^     <span style="color:#75715e">#匹配输入字符串的开始位置，除非在方括号表达式中使用，此时它表示不接受该字符集合。要匹配 ^ 字符本身，请使用 \^。</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>     <span style="color:#75715e">#标记限定符表达式的开始。要匹配 {，请使用 \{。</span>
+</span></span><span style="display:flex;"><span>|     <span style="color:#75715e">#指明两项之间的一个选择。要匹配 |，请使用 \|。</span>
+</span></span></code></pre></div><h3 id="4限定符">4.限定符</h3>
+<p>限定符用来指定正则表达式的一个给定组件必须要出现多少次才能满足匹配。有 * 或 + 或 ? 或 {n} 或 {n,} 或 {n,m} 共6种。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>*     <span style="color:#75715e">#匹配前面的子表达式零次或多次。例如，zo* 能匹配 &#34;z&#34; 以及 &#34;zoo&#34;。* 等价于{0,}。</span>
+</span></span><span style="display:flex;"><span>+     <span style="color:#75715e">#匹配前面的子表达式一次或多次。例如，&#39;zo+&#39; 能匹配 &#34;zo&#34; 以及 &#34;zoo&#34;，但不能匹配 &#34;z&#34;。+ 等价于 {1,}。</span>
+</span></span><span style="display:flex;"><span>?     <span style="color:#75715e">#匹配前面的子表达式零次或一次。</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#例如，&#34;do(es)?&#34; 可以匹配 &#34;do&#34; 、 &#34;does&#34; 中的 &#34;does&#34; 、 &#34;doxy&#34; 中的 &#34;do&#34; 。? 等价于 {0,1}。</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>n<span style="color:#f92672">}</span>   <span style="color:#75715e">#  n 是一个非负整数。匹配确定的 n 次。例如，&#39;o{2}&#39; 不能匹配 &#34;Bob&#34; 中的 &#39;o&#39;，但是能匹配 &#34;food&#34; 中的两个 o。</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>n,<span style="color:#f92672">}</span>  <span style="color:#75715e">#n 是一个非负整数。至少匹配n 次。例如，&#39;o{2,}&#39; 不能匹配 &#34;Bob&#34; 中的 &#39;o&#39;，但能匹配 &#34;foooood&#34; 中的所有 o。&#39;o{1,}&#39; 等价于 &#39;o+&#39;。&#39;o{0,}&#39; 则等价于 &#39;o*&#39;。</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>n,m<span style="color:#f92672">}</span> <span style="color:#75715e">#m 和 n 均为非负整数，其中n &lt;= m。最少匹配 n 次且最多匹配 m 次。</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#例如，&#34;o{1,3}&#34; 将匹配 &#34;fooooood&#34; 中的前三个 o。&#39;o{0,1}&#39; 等价于 &#39;o?&#39;。请注意在逗号和两个数之间不能有空格。</span>
+</span></span></code></pre></div><h3 id="5定位符">5.定位符</h3>
+<p>定位符使您能够将正则表达式固定到行首或行尾。它们还使您能够创建这样的正则表达式，这些正则表达式出现在一个单词内、在一个单词的开头或者一个单词的结尾。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>^     <span style="color:#75715e">#匹配输入字符串开始的位置。如果设置了 RegExp 对象的 Multiline 属性，^ 还会与 \n 或 \r 之后的位置匹配。</span>
+</span></span><span style="display:flex;"><span>$     <span style="color:#75715e">#匹配输入字符串结尾的位置。如果设置了 RegExp 对象的 Multiline 属性，$ 还会与 \n 或 \r 之前的位置匹配。</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">\b</span>    <span style="color:#75715e">#匹配一个字边界，即字与空格间的位置。</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">\B</span>    <span style="color:#75715e">#非字边界匹配。</span>
+</span></span></code></pre></div>]]></content></item><item><title>ssh免密登录</title><link>https://hesoong.github.io/posts/ssh-pass-free/</link><pubDate>Fri, 15 Nov 2019 00:00:00 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/ssh-pass-free/</guid><description>当我们在启动spark集群work节点的的时候，每次都需要输入每个节点服务器的密码，这样无疑是很麻烦的。设置SSH免密后就可跳过密码输入的步</description><content type="html"><![CDATA[<p>当我们在启动spark集群work节点的的时候，每次都需要输入每个节点服务器的密码，这样无疑是很麻烦的。设置SSH免密后就可跳过密码输入的步骤：
+首先我们有多台服务器</p>
+<h3 id="生成ssh公钥">生成SSH公钥</h3>
+<p>过程中直接回车就好</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>ssh-keygen -t rsa
+</span></span></code></pre></div><h3 id="分别将每台服务器生成的-rootssh-目录下的公钥文件复制成authorized_keys">分别将每台服务器生成的 /root/.ssh 目录下的公钥文件复制成<strong>authorized_keys</strong></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>cp id_rsa_pub authorized_keys
+</span></span></code></pre></div><h3 id="配置ssh免密登录">配置ssh免密登录</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>ssh-copy-id -i hostname <span style="color:#75715e"># 或者ip</span>
+</span></span></code></pre></div>]]></content></item><item><title>spark 单机环境搭建</title><link>https://hesoong.github.io/posts/spark-deploy-singleton/</link><pubDate>Wed, 13 Nov 2019 00:00:00 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/spark-deploy-singleton/</guid><description>环境需要 java环境部署 spark环境部署 java环境部署（安装jdk） 参考：linux下java环境部署 spark 环境部署 spark安装包下载 &amp;n</description><content type="html"><![CDATA[<h2 id="环境需要">环境需要</h2>
+<ul>
+<li>java环境部署</li>
+<li>spark环境部署</li>
+</ul>
+<h2 id="java环境部署安装jdk">java环境部署（安装jdk）</h2>
+<p>参考：<a href="https://hesoong.github.io/posts/java-deployment-under-linux/">linux下java环境部署</a></p>
+<h2 id="spark-环境部署">spark 环境部署</h2>
+<h3 id="spark安装包下载">spark安装包下载</h3>
+<p>&ndash;&gt;<a href="http://spark.apache.org/downloads.html">spark官网下载地址</a>&lt;&ndash;</p>
+<p>这里我下载的2.4.4版本:<code>spark-2.4.4-bin-hadoop2.7.tgz</code></p>
+<h3 id="解压缩">解压缩</h3>
+<p>将下载的tgz包放到自定义路径下，我这里放到的 <strong>/opt</strong> 下
+然后就是解压了，linux下的解压命令是</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>tar -zxvf spark-2.4.4-bin-hadoop2.7.tgz
+</span></span></code></pre></div><p>为了操作方便，将解压得到的spark-2.4.4-bin-hadoop2.7文件夹改名为spark-2.4.4：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mv spark-2.4.4-bin-hadoop2.7 spark-2.4.4
+</span></span></code></pre></div><h3 id="配置环境变量">配置环境变量</h3>
+<p>配置系统的环境变量：编辑 <strong>/etc/profile</strong> 文件，若执行命令提示没有 <strong>vim</strong> 时，用 <strong>vi</strong> 代替即可，也可以用如下命令安装即可</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span> yum -y install vim
+</span></span></code></pre></div><p>编辑环境变量：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>vim  /etc/profile
+</span></span></code></pre></div><p>然后在文件的最后加上如下配置：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#Spark</span>
+</span></span><span style="display:flex;"><span>export SPARK_HOME<span style="color:#f92672">=</span>/opt/spark-2.4.4
+</span></span><span style="display:flex;"><span>export PATH<span style="color:#f92672">=</span>$PATH:$SPARK_HOME/bin
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Spark end</span>
+</span></span></code></pre></div><p>重新加载文件让其生效</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>source /etc/profile
+</span></span></code></pre></div><p>然后键盘按下 <strong>“Esc”</strong> 键退出编辑模式，输入 <strong>:wq</strong> 保存即可</p>
+<p>重新加载文件让其生效</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>source /etc/profile
+</span></span></code></pre></div><h3 id="配置spark的配置文件之单机版">配置spark的配置文件之单机版</h3>
+<p>进入%SPARK_HOME%/conf路径，分别拷贝两个配置文件</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>cd /opt/spark-2.4.4/conf
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 分别拷贝两个配置文件</span>
+</span></span><span style="display:flex;"><span>cp spark-env.sh.template spark-env.sh
+</span></span><span style="display:flex;"><span>cp slaves.template  slaves
+</span></span></code></pre></div><p>编辑spark-env.sh文件：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>export SPARK_MASTER_IP<span style="color:#f92672">=</span>192.168.1.210
+</span></span><span style="display:flex;"><span>export SPARK_MASTER_PORT<span style="color:#f92672">=</span><span style="color:#ae81ff">7077</span>
+</span></span></code></pre></div><p>编辑slaves文件：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>localhost
+</span></span></code></pre></div><p>测试环境配置是否成功</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>cd /opt/spark-2.4.4/bin/
+</span></span><span style="display:flex;"><span>./run-example   SparkPi   <span style="color:#ae81ff">10</span>
+</span></span></code></pre></div><p>出现如下图所示字样即配置成功</p>
+<p><img src="spark%E6%B5%8B%E8%AF%95.png" alt="spark测试"></p>
+<p>启动spark，bin目录下执行</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>./spark-shell
+</span></span></code></pre></div><h3 id="配置spark的配置文件之单机版集群版">配置spark的配置文件之单机版集群版</h3>
+<p>spark 的一些默认端口</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">8080</span>: <span style="color:#ae81ff">master的webUI，sparkwebUI的端口</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">7077</span>: <span style="color:#ae81ff">提交任务的端口</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">8081</span>: <span style="color:#ae81ff">worker的webUI的端口</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">18080</span>: <span style="color:#ae81ff">historyServer的webUI的端口</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">4040</span>: <span style="color:#ae81ff">application的webUI的端口</span>
+</span></span></code></pre></div>]]></content></item><item><title>war包部署spring cloud 工程</title><link>https://hesoong.github.io/posts/war%E5%8C%85%E9%83%A8%E7%BD%B2spring-cloud%E5%B7%A5%E7%A8%8B/</link><pubDate>Sat, 07 Sep 2019 00:00:00 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/war%E5%8C%85%E9%83%A8%E7%BD%B2spring-cloud%E5%B7%A5%E7%A8%8B/</guid><description>最近接到一个任务：将spring cloud架构的系统部署到国产中间件：apusic(金蝶)中去。 思路 由于之前完全没有接触过这个中间件，第一个</description><content type="html"><![CDATA[<p>最近接到一个任务：将spring cloud架构的系统部署到国产中间件：apusic(金蝶)中去。</p>
+<h2 id="思路">思路</h2>
+<p>由于之前完全没有接触过这个中间件，第一个想到的就是不用springboot 自带的tomcat，将服务器打成war包部署到外部tomcat中去。部署成功后再将他搬到apusic(当时想的是毕竟GC，操作应该大同小异)。</p>
+<p>于是就开始了下面的操作:</p>
+<blockquote>
+<p>项目是gradle构建</p>
+</blockquote>
+<h3 id="更改buildgradle将springboot-服务打包成war">更改<code>build.gradle</code>将Springboot 服务打包成war</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-gradle" data-lang="gradle"><span style="display:flex;"><span>apply plugin: <span style="color:#e6db74">&#39;java&#39;</span>
+</span></span><span style="display:flex;"><span>apply plugin: <span style="color:#e6db74">&#39;org.springframework.boot&#39;</span>
+</span></span><span style="display:flex;"><span>apply plugin: <span style="color:#e6db74">&#39;eclipse&#39;</span>
+</span></span><span style="display:flex;"><span>apply plugin: <span style="color:#e6db74">&#39;net.saliman.properties&#39;</span>
+</span></span><span style="display:flex;"><span>apply plugin: <span style="color:#e6db74">&#39;io.spring.dependency-management&#39;</span>
+</span></span><span style="display:flex;"><span>apply plugin: <span style="color:#e6db74">&#39;war&#39;</span> <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#960050;background-color:#1e0010">引入</span>war插件
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>dependencies <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#960050;background-color:#1e0010">由于用外部</span>tomcat启动 <span style="color:#960050;background-color:#1e0010">去掉继承的</span>tomcat
+</span></span><span style="display:flex;"><span>    providedRuntime <span style="color:#e6db74">&#39;org.springframework.boot:spring-boot-starter-tomcat&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="新增一个启动配置类继承springbootservletinitializer-接口重写configure方法">新增一个启动配置类继承SpringBootServletInitializer 接口，重写configure方法</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @Author: hesong
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @Describe:
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MCStartApplication</span> <span style="color:#66d9ef">extends</span> SpringBootServletInitializer <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">protected</span> SpringApplicationBuilder <span style="color:#a6e22e">configure</span><span style="color:#f92672">(</span>SpringApplicationBuilder builder<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> builder<span style="color:#f92672">.</span><span style="color:#a6e22e">sources</span><span style="color:#f92672">(</span>ManagementCenterApplication<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div>]]></content></item><item><title>git使用</title><link>https://hesoong.github.io/posts/git%E4%BD%BF%E7%94%A8/</link><pubDate>Tue, 03 Sep 2019 00:00:00 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/git%E4%BD%BF%E7%94%A8/</guid><description>git 常用操作 stash git pull #down代码 git stash #备份 git stash save [&amp;lt;message&amp;gt;] #备份及添加备份信息 git stash pop #还原代码 branch git checkout -b abc #git创建分支abc git checkout master #切换到maste</description><content type="html"><![CDATA[<h2 id="git-常用操作">git 常用操作</h2>
+<hr>
+<h3 id="stash">stash</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>git pull        <span style="color:#75715e">#down代码</span>
+</span></span><span style="display:flex;"><span>git stash       <span style="color:#75715e">#备份</span>
+</span></span><span style="display:flex;"><span>git stash save <span style="color:#f92672">[</span>&lt;message&gt;<span style="color:#f92672">]</span> <span style="color:#75715e">#备份及添加备份信息</span>
+</span></span><span style="display:flex;"><span>git stash pop   <span style="color:#75715e">#还原代码</span>
+</span></span></code></pre></div><h3 id="branch">branch</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>git checkout -b abc         <span style="color:#75715e">#git创建分支abc</span>
+</span></span><span style="display:flex;"><span>	git checkout master     <span style="color:#75715e">#切换到master分支</span>
+</span></span><span style="display:flex;"><span>git branch -d <span style="color:#e6db74">&#39;branchName&#39;</span>  <span style="color:#75715e">#删除本地分支</span>
+</span></span><span style="display:flex;"><span>git status                  <span style="color:#75715e">#查看分支中的代码目录</span>
+</span></span><span style="display:flex;"><span>git add TowerLampDll.dll    <span style="color:#75715e">#添加待提交代码TowerLampDll.dll到git</span>
+</span></span><span style="display:flex;"><span>git status                  <span style="color:#75715e">#查看提交的代码；（绿色表示准备提交的，红色表示可选择提交的）</span>
+</span></span><span style="display:flex;"><span>git reset HEAD &lt;file&gt;       <span style="color:#75715e">#恢复已add的文件为未提交的状态</span>
+</span></span><span style="display:flex;"><span>git pull &lt;origin&gt; &lt;activemq_local&gt; <span style="color:#75715e">#git更新远程分支代码到本地,&lt;origin&gt;:远程库名 &lt;activemq_local&gt;：待更新远程分支名</span>
+</span></span><span style="display:flex;"><span>git branch -a | grep -v -E <span style="color:#e6db74">&#39;master|remotes&#39;</span>|xargs git branch -d <span style="color:#75715e">#批量删除本地分支</span>
+</span></span><span style="display:flex;"><span>    grep: 
+</span></span><span style="display:flex;"><span>        -v 取反（not）
+</span></span><span style="display:flex;"><span>        -E 用分隔符连接<span style="color:#f92672">(</span>or<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>git remote show origin  <span style="color:#75715e">#  查看远程库的一些信息，及与本地分支的信息</span>
+</span></span><span style="display:flex;"><span>git remote prune origin <span style="color:#75715e">#  删除本地库中这些相比较远程库中已经不存在的分支</span>
+</span></span></code></pre></div><h3 id="commit">commit</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>git status <span style="color:#75715e">#查看更改的文件，红色表示有改动，绿色表示准备提交到本地仓库中文文件</span>
+</span></span><span style="display:flex;"><span>git diff <span style="color:#75715e"># 用于比较两次修改的差异</span>
+</span></span><span style="display:flex;"><span>git commit	<span style="color:#75715e">#进入vi编辑器编辑注释， 编辑好后用:wq命令提交</span>
+</span></span><span style="display:flex;"><span>git push -u origin abc <span style="color:#75715e"># push本地仓库代码到远程&#39;abc&#39;分支</span>
+</span></span><span style="display:flex;"><span>git log <span style="color:#75715e">#可查看git提交版本编号</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#然后在浏览器中进入git lab 提交merge请求</span>
+</span></span><span style="display:flex;"><span>git config commit.template myTemplate.template	<span style="color:#75715e">#运行模板</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 修改提交信息</span>
+</span></span><span style="display:flex;"><span>git commit --amend <span style="color:#75715e"># 进入编辑器修改</span>
+</span></span><span style="display:flex;"><span>git commit --amend <span style="color:#e6db74">&#39;update information&#39;</span> <span style="color:#75715e"># 直接更改为新输入的提交信息</span>
+</span></span></code></pre></div><h3 id="restore">restore</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git restore <span style="color:#75715e"># git restore命令是撤销的意思，也就是把文件从缓存区撤销，回到未被追踪的状态。</span>
+</span></span></code></pre></div><h3 id="revert">revert</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>git reset HEAD <span style="color:#75715e"># 已经add 将文件回滚到上次add的状态</span>
+</span></span><span style="display:flex;"><span>git checkout -- <span style="color:#e6db74">&#39;fileName&#39;</span><span style="color:#75715e">#文件还未add到缓存队列</span>
+</span></span><span style="display:flex;"><span>git checkout . <span style="color:#75715e"># 回滚所有修改的文件</span>
+</span></span><span style="display:flex;"><span>git checkout . <span style="color:#f92672">&amp;&amp;</span> git clean -df <span style="color:#75715e"># 回滚所有修改、删除、新增的文件</span>
+</span></span></code></pre></div><h3 id="cherry-pick">cherry-pick</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>git cherry-pick &lt;commit No.&gt;    <span style="color:#75715e"># commit编号</span>
+</span></span><span style="display:flex;"><span>git cherry-pick No1..No2        <span style="color:#75715e"># N1,N2两次commit编号</span>
+</span></span></code></pre></div><h3 id="rebase">rebase</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>git checkout -b testbranch  <span style="color:#75715e"># 切换到待rebase的分支（假设该分支已推到远程）</span>
+</span></span><span style="display:flex;"><span>git rebase master
+</span></span><span style="display:flex;"><span>    git rebase --continue   <span style="color:#75715e"># 解决冲突后继续rebase</span>
+</span></span><span style="display:flex;"><span>    git rebase --skip       <span style="color:#75715e"># 跳过</span>
+</span></span><span style="display:flex;"><span>    git rebase --abort      <span style="color:#75715e"># 返回rebase前的状态</span>
+</span></span><span style="display:flex;"><span>git push --force-with-lease origin feature <span style="color:#75715e"># 将rebase后的代码同步到远程分支</span>
+</span></span></code></pre></div><h3 id="merge">merge</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>git pull <span style="color:#75715e">#更新代码</span>
+</span></span><span style="display:flex;"><span>git checkout -b <span style="color:#e6db74">&#39;newBranchName#新建一个本地分支
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">git merge &#39;</span>target<span style="color:#e6db74">&#39; #merge target分支，target待合并的分支，git会自动merge部分代码，未能merge的需要手动merge
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">git status #查看merge后的状态
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">for example：
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">bms@bms MINGW64 /c/test (master)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">$ git pull
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Already up-to-date.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">bms@bms MINGW64 /c/test (master)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">$ git checkout -b activemq_local
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Switched to a new branch &#39;</span>activemq_local<span style="color:#960050;background-color:#1e0010">&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>bms@bms MINGW64 /c/test <span style="color:#f92672">(</span>activemq_local<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>$ git merge activemq
+</span></span><span style="display:flex;"><span>Auto-merging test-commons/src/main/java/com/song/commons/model/NeClass.java
+</span></span><span style="display:flex;"><span>Auto-merging test-commons/src/main/java/com/song/commons/model/ITProtocol.java
+</span></span><span style="display:flex;"><span>Auto-merging test-collector/src/main/resources/connectors.xml
+</span></span><span style="display:flex;"><span>CONFLICT <span style="color:#f92672">(</span>content<span style="color:#f92672">)</span>: Merge conflict in test-collector/src/main/resources/connectors.xml
+</span></span><span style="display:flex;"><span>Automatic merge failed; fix conflicts and <span style="color:#66d9ef">then</span> commit the result.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>bms@bms MINGW64 /c/test <span style="color:#f92672">(</span>activemq_local|MERGING<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>$ git status
+</span></span><span style="display:flex;"><span>On branch activemq_local
+</span></span><span style="display:flex;"><span>You have unmerged paths.
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">(</span>fix conflicts and run <span style="color:#e6db74">&#34;git commit&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">(</span>use <span style="color:#e6db74">&#34;git merge --abort&#34;</span> to abort the merge<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Changes to be committed:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>modified:   connectors/test-buildin-connectors/build.gradle
+</span></span><span style="display:flex;"><span>new file:   connectors/test-buildin-connectors/src/main/java/com/song/test/collector/connections/ActiveMQConnection.java
+</span></span><span style="display:flex;"><span>new file:   test-collector-data/src/main/java/com/song/test/networkentity/target/ActiveMQTarget.java
+</span></span><span style="display:flex;"><span>new file:   test-collector/src/main/resources/config/indicators/indicator.activemq.xml
+</span></span><span style="display:flex;"><span>new file:   test-collector/src/main/resources/config/query-templates/web-server/query.activemq.xml
+</span></span><span style="display:flex;"><span>modified:   test-commons/src/main/java/com/song/commons/model/ITProtocol.java
+</span></span><span style="display:flex;"><span>modified:   test-commons/src/main/java/com/song/commons/model/NeClass.java
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Unmerged paths:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">(</span>use <span style="color:#e6db74">&#34;git add &lt;file&gt;...&#34;</span> to mark resolution<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>both modified:   test-collector/src/main/resources/connectors.xml
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Changes not staged <span style="color:#66d9ef">for</span> commit:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">(</span>use <span style="color:#e6db74">&#34;git add/rm &lt;file&gt;...&#34;</span> to update what will be committed<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">(</span>use <span style="color:#e6db74">&#34;git checkout -- &lt;file&gt;...&#34;</span> to discard changes in working directory<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 此时在ide中将both modified (冲突文件)解决</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 然后git add . </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># git merge --continue</span>
+</span></span><span style="display:flex;"><span>.
+</span></span><span style="display:flex;"><span>.
+</span></span><span style="display:flex;"><span>.
+</span></span></code></pre></div><h2 id="git删除用户名密码">git删除用户名密码</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># tortoriseGit --&gt; settings --&gt; GIt--&gt; Edit systemwide gitconfig  打开文件</span>
+</span></span><span style="display:flex;"><span>                                            
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 或者 直接打开文件：GIT_HOME/mingw64/etc/gitconfig 删除其中credential一项                            </span>
+</span></span><span style="display:flex;"><span>[<span style="color:#ae81ff">http]</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">sslCAInfo = D:/Program Files/Git/mingw64/ssl/certs/ca-bundle.crt</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">sslBackend = openssl</span>
+</span></span><span style="display:flex;"><span>[<span style="color:#ae81ff">diff &#34;astextplain&#34;]</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">textconv = astextplain</span>
+</span></span><span style="display:flex;"><span>[<span style="color:#ae81ff">filter &#34;lfs&#34;]</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">clean = git-lfs clean -- %f</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">smudge = git-lfs smudge -- %f</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">process = git-lfs filter-process</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">required = true</span>
+</span></span><span style="display:flex;"><span>[<span style="color:#ae81ff">credential]</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ae81ff">helper = manager</span>
+</span></span></code></pre></div><h2 id="git-status-不能显示中文">git status 不能显示中文</h2>
+<p>问题描述：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt; git status
+</span></span><span style="display:flex;"><span>Untracked files:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">(</span>use <span style="color:#e6db74">&#34;git add &lt;file&gt;...&#34;</span> to include in what will be committed<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;content/posts/Windows\347\254\224\350\256\260.md&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;content/posts/gradle\347\254\224\350\256\260.md&#34;</span>
+</span></span></code></pre></div><ul>
+<li>原因： 默认情况下，中文文件名在工作区状态输出，中文不能正确显示，而是显示为八进制的字符编码</li>
+<li>解决办法： 将git配置文件<code>core.quotepath</code>项设置未false。 <code>quotepath</code>表示引用路径，加上<code>--global</code> 表示全局</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git config --global core.quotepath false
+</span></span></code></pre></div><h2 id="git-不能使用正则仅适用于终端使用了zsh的情况">git 不能使用正则（仅适用于终端使用了zsh的情况）</h2>
+<p>问题描述：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 使用正则匹配不能添加文件</span>
+</span></span><span style="display:flex;"><span>&gt; git add *.java
+</span></span></code></pre></div><p>解决方法：在<code>.zshrc</code>文件中添加<code>setout nonomatch</code>即可</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;setout nonomatch&#34;</span> &gt;&gt; ~/.zshrc
+</span></span><span style="display:flex;"><span>source ~/.zshrc
+</span></span></code></pre></div><h2 id="git-修改远程repo-url">git 修改远程Repo Url</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 方式1 -- 直接设置 适用于新的repo 之前没有设置过url</span>
+</span></span><span style="display:flex;"><span>git remote add origin 
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 方式2 -- 先删除 在设置</span>
+</span></span><span style="display:flex;"><span>git remote rm origin 
+</span></span><span style="display:flex;"><span>git remote add origin <span style="color:#f92672">[</span>url<span style="color:#f92672">]</span>
+</span></span></code></pre></div>]]></content></item><item><title>高可用性的mongo集群搭建</title><link>https://hesoong.github.io/posts/mongo%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/</link><pubDate>Tue, 25 Jun 2019 00:00:00 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/mongo%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/</guid><description>mongoDB安装 参照：https://docs.mongodb.com/manual/tutorial/install-mongodb-o</description><content type="html"><![CDATA[<h2 id="mongodb安装">mongoDB安装</h2>
+<p>参照：<a href="https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/">https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/</a></p>
+<h3 id="配置yum管理包">配置yum管理包</h3>
+<p>在路径/etc/yum.repos.d/下创建文件mongodb-org-3.4.repo</p>
+<pre tabindex="0"><code class="language-repo" data-lang="repo">[mongodb-org-3.4]
+name=MongoDB Repository
+baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.4/x86_64/
+gpgcheck=1
+enabled=1
+gpgkey=https://www.mongodb.org/static/pgp/server-3.4.asc
+</code></pre><ul>
+<li>安装mongo</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>yum install -y mongodb-org
+</span></span></code></pre></div><ul>
+<li>
+<p>mongo相关操作</p>
+</li>
+<li>
+<p>创建用户</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mongo       //启动Mongo shell命令
+</span></span><span style="display:flex;"><span>use admin   //切换到admin数据库
+</span></span><span style="display:flex;"><span>db.createUser<span style="color:#f92672">({</span>user:<span style="color:#e6db74">&#34;root&#34;</span>,pwd:<span style="color:#e6db74">&#34;123456&#34;</span>,roles:<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;root&#34;</span><span style="color:#f92672">]})</span>    //创建用户
+</span></span><span style="display:flex;"><span>db.auth<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;root&#34;</span>,<span style="color:#e6db74">&#34;123456&#34;</span><span style="color:#f92672">)</span>    //验证用户创建是否成功
+</span></span></code></pre></div><h2 id="高可用性的mongo集群">高可用性的mongo集群</h2>
+<p>参照：<a href="http://www.lanceyan.com/tech/arch/mongodb_shard1.html">http://www.lanceyan.com/tech/arch/mongodb_shard1.html</a></p>
+<h3 id="三台服务器分配">三台服务器分配</h3>
+<p>按表格分别在各服务器进行目录创建：</p>
+<ul>
+<li>192.168.1.91</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>端口</th>
+<th>日志路径</th>
+<th>数据路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mongos</td>
+<td>20001</td>
+<td>mkdir -p /data/mongodbtest/mongos/log</td>
+<td>&ndash;</td>
+</tr>
+<tr>
+<td>Config server</td>
+<td>21001</td>
+<td>mkdir -p /data/mongodbtest/config/log</td>
+<td>mkdir -p /data/mongodbtest/config/data</td>
+</tr>
+<tr>
+<td>Shard server1主节点</td>
+<td>22001</td>
+<td>mkdir -p /data/mongodbtest/shard1/log</td>
+<td>mkdir -p /data/mongodbtest/shard1/data</td>
+</tr>
+<tr>
+<td>Shard server2副本</td>
+<td>22002</td>
+<td>mkdir -p /data/mongodbtest/shard2/log</td>
+<td>mkdir -p /data/mongodbtest/shard2/data</td>
+</tr>
+<tr>
+<td>Shard server3仲裁</td>
+<td>22003</td>
+<td>mkdir -p /data/mongodbtest/shard3/log</td>
+<td>mkdir -p /data/mongodbtest/shard3/data</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>192.168.1.92</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>端口</th>
+<th>日志路径</th>
+<th>数据路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mongos</td>
+<td>20001</td>
+<td>mkdir -p /data/mongodbtest/mongos/log</td>
+<td>&ndash;</td>
+</tr>
+<tr>
+<td>Config server</td>
+<td>21001</td>
+<td>mkdir -p /data/mongodbtest/config/log</td>
+<td>mkdir -p /data/mongodbtest/config/data</td>
+</tr>
+<tr>
+<td>Shard server1仲裁</td>
+<td>22001</td>
+<td>mkdir -p /data/mongodbtest/shard1/log</td>
+<td>mkdir -p /data/mongodbtest/shard1/data</td>
+</tr>
+<tr>
+<td>Shard server2主节点</td>
+<td>22002</td>
+<td>mkdir -p /data/mongodbtest/shard2/log</td>
+<td>mkdir -p /data/mongodbtest/shard2/data</td>
+</tr>
+<tr>
+<td>Shard server3副本</td>
+<td>22003</td>
+<td>mkdir -p /data/mongodbtest/shard3/log</td>
+<td>mkdir -p /data/mongodbtest/shard3/data</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>192.168.1.93</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>端口</th>
+<th>日志路径</th>
+<th>数据路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mongos</td>
+<td>20001</td>
+<td>mkdir -p /data/mongodbtest/mongos/log</td>
+<td>&ndash;</td>
+</tr>
+<tr>
+<td>Config server</td>
+<td>21001</td>
+<td>mkdir -p /data/mongodbtest/config/log</td>
+<td>mkdir -p /data/mongodbtest/config/data</td>
+</tr>
+<tr>
+<td>Shard server1副本</td>
+<td>22001</td>
+<td>mkdir -p /data/mongodbtest/shard1/log</td>
+<td>mkdir -p /data/mongodbtest/shard1/data</td>
+</tr>
+<tr>
+<td>Shard server2仲裁</td>
+<td>22002</td>
+<td>mkdir -p /data/mongodbtest/shard2/log</td>
+<td>mkdir -p /data/mongodbtest/shard2/data</td>
+</tr>
+<tr>
+<td>Shard server3主节点</td>
+<td>22003</td>
+<td>mkdir -p /data/mongodbtest/shard3/log</td>
+<td>mkdir -p /data/mongodbtest/shard3/data</td>
+</tr>
+</tbody>
+</table>
+<h3 id="启动config-server">启动Config server</h3>
+<ol>
+<li>
+<p>启动Config server</p>
+<ul>
+<li>
+<p>分别配置三台config服务的配置文件，分别在对应config server的conf目录下(/data/mongodbtest/config/conf/)创建mongo_config.conf文件</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">storage</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">dbPath</span>: <span style="color:#ae81ff">/data/mongodbtest/config/data</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">indexBuildRetry</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">systemLog</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">destination</span>: <span style="color:#ae81ff">file</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">path</span>: <span style="color:#ae81ff">/data/mongodbtest/config/log/config.log</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">net</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">port</span>: <span style="color:#ae81ff">21001</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">sharding</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">clusterRole</span>: <span style="color:#ae81ff">configsvr</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">replication</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">replSetName</span>: <span style="color:#ae81ff">docdetection</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">processManagement</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">fork</span>: <span style="color:#66d9ef">true</span>
+</span></span></code></pre></div></li>
+<li>
+<p>通过配置文件分别启动config配置服务</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mongod --config /data/mongodbtest/config/conf/mongo_config.conf
+</span></span></code></pre></div></li>
+</ul>
+</li>
+<li>
+<p>初始化config复本集</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span> <span style="color:#75715e">#设置config副本集，登录其中一个config服务器</span>
+</span></span><span style="display:flex;"><span> /usr/bin/mongo  127.0.0.1:21001
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#75715e">#使用admin数据库</span>
+</span></span><span style="display:flex;"><span> use admin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#75715e">#定义副本集配置</span>
+</span></span><span style="display:flex;"><span> config <span style="color:#f92672">={</span>_id:<span style="color:#e6db74">&#39;docdetection&#39;</span>,members:<span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>             <span style="color:#f92672">{</span>_id:0,host:<span style="color:#e6db74">&#39;192.168.1.91:21001&#39;</span>,priority:3<span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>             <span style="color:#f92672">{</span>_id:1,host:<span style="color:#e6db74">&#39;192.168.1.92:21001&#39;</span>,priority:2<span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>             <span style="color:#f92672">{</span>_id:2,host:<span style="color:#e6db74">&#39;192.168.1.93:21001&#39;</span>,priority:1<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>         <span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">}</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#75715e">#初始化副本集配置</span>
+</span></span><span style="display:flex;"><span> rs.initiate<span style="color:#f92672">(</span>config<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#75715e">#初始化结束（注意关闭各服务器防火墙）</span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;ok&#34;</span> : <span style="color:#ae81ff">1</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#75715e">#查看状态</span>
+</span></span><span style="display:flex;"><span>  rs.status<span style="color:#f92672">()</span>
+</span></span></code></pre></div></li>
+</ol>
+<h3 id="启动shard-server分片服务">启动Shard server（分片服务）</h3>
+<ol start="3">
+<li>
+<p>启动各分片服务</p>
+<ul>
+<li>
+<p>分别到各服务器上各shard的conf目录下建文件mongo_config.conf。eg:192.168.1.91</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#75715e"># shard1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">storage</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">dbPath</span>: <span style="color:#ae81ff">/data/mongodbtest/shard1/data</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">indexBuildRetry</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">systemLog</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">destination</span>: <span style="color:#ae81ff">file</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">path</span>: <span style="color:#ae81ff">/data/mongodbtest/shard1/log/shard1.log</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">net</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">port</span>: <span style="color:#ae81ff">22001</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">sharding</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">clusterRole</span>: <span style="color:#ae81ff">shardsvr</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">replication</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">replSetName</span>: <span style="color:#ae81ff">shard1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">processManagement</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">fork</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># shard2</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">storage</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">dbPath</span>: <span style="color:#ae81ff">/data/mongodbtest/shard2/data</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">indexBuildRetry</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">systemLog</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">destination</span>: <span style="color:#ae81ff">file</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">path</span>: <span style="color:#ae81ff">/data/mongodbtest/shard2/log/shard2.log</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">net</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">port</span>: <span style="color:#ae81ff">22002</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">sharding</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">clusterRole</span>: <span style="color:#ae81ff">shardsvr</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">replication</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">replSetName</span>: <span style="color:#ae81ff">shard2</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">processManagement</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">fork</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># shard3</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">storage</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">dbPath</span>: <span style="color:#ae81ff">/data/mongodbtest/shard3/data</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">indexBuildRetry</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">systemLog</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">destination</span>: <span style="color:#ae81ff">file</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">path</span>: <span style="color:#ae81ff">/data/mongodbtest/shard3/log/shard3.log</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">net</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">port</span>: <span style="color:#ae81ff">22003</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">sharding</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">clusterRole</span>: <span style="color:#ae81ff">shardsvr</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">replication</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">replSetName</span>: <span style="color:#ae81ff">shard3</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">processManagement</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">fork</span>: <span style="color:#66d9ef">true</span>
+</span></span></code></pre></div></li>
+<li>
+<p>通过配置文件分别启动shard分片服务(3*3=9个)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mongod --config /data/mongodbtest/shard1/conf/mongo_config.conf
+</span></span><span style="display:flex;"><span>mongod --config /data/mongodbtest/shard2/conf/mongo_config.conf
+</span></span><span style="display:flex;"><span>mongod --config /data/mongodbtest/shard3/conf/mongo_config.conf
+</span></span></code></pre></div></li>
+</ul>
+</li>
+<li>
+<p>初始化各分片服务器副本集</p>
+</li>
+</ol>
+<p>设置第一个分片副本集:shard1（保证各副本已启动）<strong>注：priority 的值决定主（值大）从关系；arbiterOnly 指定仲裁节点</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#设置第一个分片副本集，登录其中一个分片服务器</span>
+</span></span><span style="display:flex;"><span>/usr/bin/mongo  127.0.0.1:22001
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#使用admin数据库</span>
+</span></span><span style="display:flex;"><span>use admin
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#定义副本集配置</span>
+</span></span><span style="display:flex;"><span>config <span style="color:#f92672">=</span> <span style="color:#f92672">{</span> _id:<span style="color:#e6db74">&#34;shard1&#34;</span>, members:<span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">{</span>_id:0,host:<span style="color:#e6db74">&#34;192.168.1.91:22001&#34;</span>,priority:2<span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">{</span>_id:1,host:<span style="color:#e6db74">&#34;192.168.1.92:22001&#34;</span>,arbiterOnly:true<span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">{</span>_id:2,host:<span style="color:#e6db74">&#34;192.168.1.93:22001&#34;</span>,priority:1<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#初始化副本集配置</span>
+</span></span><span style="display:flex;"><span>rs.initiate<span style="color:#f92672">(</span>config<span style="color:#f92672">)</span>;
+</span></span></code></pre></div><p>设置第二个分片副本集：shard2</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#设置第二个分片副本集，登录其中一个分片服务器</span>
+</span></span><span style="display:flex;"><span>/usr/bin/mongo  127.0.0.1:22002
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#使用admin数据库</span>
+</span></span><span style="display:flex;"><span>use admin
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#定义副本集配置</span>
+</span></span><span style="display:flex;"><span>config <span style="color:#f92672">=</span> <span style="color:#f92672">{</span> _id:<span style="color:#e6db74">&#34;shard2&#34;</span>, members:<span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">{</span>_id:0,host:<span style="color:#e6db74">&#34;192.168.1.91:22002&#34;</span>,priority:1<span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">{</span>_id:1,host:<span style="color:#e6db74">&#34;192.168.1.92:22002&#34;</span>,priority:2<span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">{</span>_id:2,host:<span style="color:#e6db74">&#34;192.168.1.93:22002&#34;</span>,arbiterOnly:true<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#初始化副本集配置</span>
+</span></span><span style="display:flex;"><span>rs.initiate<span style="color:#f92672">(</span>config<span style="color:#f92672">)</span>;
+</span></span></code></pre></div><p>设置第三个分片副本集：shard3</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#设置第三个分片副本集，登录其中一个分片服务器</span>
+</span></span><span style="display:flex;"><span>/usr/bin/mongo  127.0.0.1:22003
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#使用admin数据库</span>
+</span></span><span style="display:flex;"><span>use admin
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#定义副本集配置</span>
+</span></span><span style="display:flex;"><span>config <span style="color:#f92672">=</span> <span style="color:#f92672">{</span> _id:<span style="color:#e6db74">&#34;shard3&#34;</span>, members:<span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">{</span>_id:0,host:<span style="color:#e6db74">&#34;192.168.1.91:22003&#34;</span>,arbiterOnly:true<span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">{</span>_id:1,host:<span style="color:#e6db74">&#34;192.168.1.92:22003&#34;</span>,priority:1<span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">{</span>_id:2,host:<span style="color:#e6db74">&#34;192.168.1.93:22003&#34;</span>,priority:2<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#初始化副本集配置</span>
+</span></span><span style="display:flex;"><span>rs.initiate<span style="color:#f92672">(</span>config<span style="color:#f92672">)</span>;
+</span></span></code></pre></div><h3 id="启动mongos路由服务">启动mongos路由服务</h3>
+<ul>
+<li>配置mongos服务的配置文件，对应的conf目录下创建mongo_config.conf文件</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">systemLog</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">destination</span>: <span style="color:#ae81ff">file</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">path</span>: <span style="color:#ae81ff">/data/mongodbtest/mongos/log/mongos.log</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">net</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">port</span>: <span style="color:#ae81ff">20001</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">sharding</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">configDB</span>: <span style="color:#ae81ff">docdetection/192.168.1.91:21001,192.168.1.92:21001,192.168.1.93:21001</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">processManagement</span>:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">fork</span>: <span style="color:#66d9ef">true</span>
+</span></span></code></pre></div><ul>
+<li>通过配置文件分别启动config配置服务</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mongos --config /data/mongodbtest/mongos/conf/mongo_config.conf
+</span></span></code></pre></div><h3 id="整合配置路由分片服务器">整合配置、路由、分片服务器</h3>
+<p>整合配置服务器、路由服务器，各个分片服务器</p>
+<ol>
+<li>
+<p>整合配置、路由、分片服务器</p>
+<ul>
+<li>
+<p>目前搭建了mongodb配置服务器、路由服务器，各个分片服务器，不过应用程序连接到 mongos 路由服务器并不能使用分片机制，还需要在程序里设置分片配置，让分片生效。<strong>分别连接三个mongos，添加分片副本集。</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#设置分片配置，登录mongos路由服务器</span>
+</span></span><span style="display:flex;"><span>/usr/bin/mongo 127.0.0.1:20001
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#使用admin数据库</span>
+</span></span><span style="display:flex;"><span>use admin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#串联路由服务器与分片副本集1</span>
+</span></span><span style="display:flex;"><span>sh.addShard<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;shard1/192.168.1.91:22001,192.168.1.92:22001,192.168.1.93:22001&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#串联路由服务器与分片副本集2</span>
+</span></span><span style="display:flex;"><span>sh.addShard<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;shard2/192.168.1.91:22002,192.168.1.92:22002,192.168.1.93:22002&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#串联路由服务器与分片副本集3</span>
+</span></span><span style="display:flex;"><span>sh.addShard<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;shard3/192.168.1.91:22003,192.168.1.92:22003,192.168.1.93:22003&#34;</span><span style="color:#f92672">)</span>
+</span></span></code></pre></div></li>
+</ul>
+</li>
+<li>
+<p>添加创建用户</p>
+<ul>
+<li>
+<p>集群管理员账号（mongos和配置服务器的集群管理员用户是可以通用的）</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#以下是创建集群管理员用户步骤（连接其中一台Mongos服务上执行即可）</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#登录mongos路由服务器</span>
+</span></span><span style="display:flex;"><span>/usr/bin/mongo 127.0.0.1:20001
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#使用admin数据库</span>
+</span></span><span style="display:flex;"><span>use admin
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#创建账号及指定权限</span>
+</span></span><span style="display:flex;"><span>db.createUser<span style="color:#f92672">({</span>
+</span></span><span style="display:flex;"><span>  user: <span style="color:#e6db74">&#34;adminRoot&#34;</span>,
+</span></span><span style="display:flex;"><span>  pwd: <span style="color:#e6db74">&#34;adminbear&#34;</span>,
+</span></span><span style="display:flex;"><span>     roles: <span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>         <span style="color:#f92672">{</span> role: <span style="color:#e6db74">&#34;root&#34;</span>, db: <span style="color:#e6db74">&#34;admin&#34;</span> <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>         <span style="color:#f92672">{</span> role: <span style="color:#e6db74">&#34;clusterAdmin&#34;</span>, db: <span style="color:#e6db74">&#34;admin&#34;</span> <span style="color:#f92672">}</span>,
+</span></span><span style="display:flex;"><span>         <span style="color:#f92672">{</span> role: <span style="color:#e6db74">&#34;userAdmin&#34;</span>, db: <span style="color:#e6db74">&#34;admin&#34;</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">})</span>;
+</span></span></code></pre></div></li>
+<li>
+<p>数据库用户</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#登录mongos路由服务器</span>
+</span></span><span style="display:flex;"><span>/usr/bin/mongo 127.0.0.1:20001
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#以下是为数据库名mongoTest，创建数据库用户</span>
+</span></span><span style="display:flex;"><span>use mongoTest;
+</span></span><span style="display:flex;"><span>db.createUser<span style="color:#f92672">({</span>
+</span></span><span style="display:flex;"><span>  user: <span style="color:#e6db74">&#34;mongoTestUser&#34;</span>,
+</span></span><span style="display:flex;"><span>  pwd: <span style="color:#e6db74">&#34;bear&#34;</span>,
+</span></span><span style="display:flex;"><span>  roles: <span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">{</span> role: <span style="color:#e6db74">&#34;readWrite&#34;</span>, db: <span style="color:#e6db74">&#34; mongoTest&#34;</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">)</span>;
+</span></span></code></pre></div><p>目前配置服务、路由服务、分片服务、副本集服务都已经串联起来了，但我们的目的是希望插入数据，数据能够自动分片。连接在mongos上，准备让指定的数据库、指定的集合分片生效。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>创建数据库，让指定数据库分片生效</p>
+<ol>
+<li>
+<p>建库、表、指定应用分片的库</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#登录mongos路由服务器</span>
+</span></span><span style="display:flex;"><span>/usr/bin/mongo 127.0.0.1:20001
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#创建或者使用mongoTest数据库</span>
+</span></span><span style="display:flex;"><span>use mongoTest;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#创建mongoTest数据库中的集合</span>
+</span></span><span style="display:flex;"><span>db.createCollection<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;table1&#34;</span><span style="color:#f92672">)</span>  <span style="color:#75715e">#新建集合：table1</span>
+</span></span><span style="display:flex;"><span> ·
+</span></span><span style="display:flex;"><span> ·
+</span></span><span style="display:flex;"><span> ·
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#切换到admin数据库</span>
+</span></span><span style="display:flex;"><span>use admin
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#指定testdb分片生效，mongoTest为数据库名称</span>
+</span></span><span style="display:flex;"><span>db.runCommand<span style="color:#f92672">(</span> <span style="color:#f92672">{</span> enablesharding :<span style="color:#e6db74">&#34;mongoTest&#34;</span><span style="color:#f92672">})</span>;
+</span></span></code></pre></div></li>
+<li>
+<p>指定分片的表。两种分片方式： Hashed Shard Key与Ranged Shard Key</p>
+<ul>
+<li>
+<p>Hashed Shard Key：它采用字段的索引哈希值作为 shard key 的取值，这样做可以保证数据的均匀分布。在 mongos 和各个 shard 集群之间存在一个哈希值计算方法，所有的数据在迁移时都是根据这个方法来计算数据应当被迁移到什么地方。当 mongos 接收到一条语句时，通常他会把这条语句广播到所有的 shard 上去执行。</p>
+</li>
+<li>
+<p>Ranged Shard Key: 根据 shard key 的取值，它把数据切分成连续的几个区间。取值相近的纪录会放进同一个 shard 服务器。好处是查询连续取值纪录时，查询效率可以得到保证。当数据库查询语句发送到 mongos 中时，mongos 会很快的找到目标 shard，而且不需要将语句发送到所有的 shard 上，一般只需要少量的 shard 就可以完成查询操作。缺点是不能保证数据的平均分配，在数据插入和修改时会产生比较严重的性能瓶颈</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#指定数据库里需要分片的集合和片键，table1为mongoTest数据库中集合名称</span>
+</span></span><span style="display:flex;"><span>db.runCommand<span style="color:#f92672">({</span>shardcollection:<span style="color:#e6db74">&#34;mongoTest.table1&#34;</span>,key:<span style="color:#f92672">{</span><span style="color:#e6db74">&#34;ZZJGDM&#34;</span>: <span style="color:#e6db74">&#34;hashed&#34;</span><span style="color:#f92672">}})</span> //Hashed Shard Key
+</span></span><span style="display:flex;"><span>db.runCommand<span style="color:#f92672">({</span>shardcollection:<span style="color:#e6db74">&#34;mongoTest.table1&#34;</span>,key:<span style="color:#f92672">{</span>_id:1<span style="color:#f92672">}})</span>//    Ranged Shard Key
+</span></span></code></pre></div></li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+]]></content></item><item><title>linux的一些零星记录</title><link>https://hesoong.github.io/posts/linux/</link><pubDate>Wed, 30 Jan 2019 00:00:00 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/linux/</guid><description>1. linux忘记root密码 解决办法 2. java环境变量配置 1.编辑系统变量文件：vi /etc/profile export JAVA_HOME=/usr/java/jdk1.8.0_151 export JRE_HOME=$JAVA_HOME/jre export CLASSPATH=.:$JAVA_HOME/lib:$JRE_HOME/lib export PATH=$JAVA_HOME/bin:$PATH 3.进程 netstat -tunlp |grep 22 //查看22端口使用情</description><content type="html"><![CDATA[<h2 id="1-linux忘记root密码">1. linux忘记root密码</h2>
+<p><a href="https://www.cnblogs.com/kerrycode/p/3479925.html">解决办法</a></p>
+<h2 id="2-java环境变量配置">2. java环境变量配置</h2>
+<p>1.编辑系统变量文件：vi /etc/profile</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>export JAVA_HOME<span style="color:#f92672">=</span>/usr/java/jdk1.8.0_151
+</span></span><span style="display:flex;"><span>export JRE_HOME<span style="color:#f92672">=</span>$JAVA_HOME/jre
+</span></span><span style="display:flex;"><span>export CLASSPATH<span style="color:#f92672">=</span>.:$JAVA_HOME/lib:$JRE_HOME/lib
+</span></span><span style="display:flex;"><span>export PATH<span style="color:#f92672">=</span>$JAVA_HOME/bin:$PATH
+</span></span></code></pre></div><h2 id="3进程">3.进程</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>netstat -tunlp |grep <span style="color:#ae81ff">22</span> //查看22端口使用情况
+</span></span></code></pre></div><h2 id="4tar解压缩">4.tar解、压缩</h2>
+<p>1.<strong>tar</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>-c: 建立压缩档案
+</span></span><span style="display:flex;"><span>-x：解压
+</span></span><span style="display:flex;"><span>-t：查看内容
+</span></span><span style="display:flex;"><span>-r：向压缩归档文件末尾追加文件
+</span></span><span style="display:flex;"><span>-u：更新原压缩包中的文件
+</span></span></code></pre></div><p>2.这五个是独立的命令，压缩解压都要用到其中一个，可以和别的命令连用但只能用其中一个。下面的参数是根据需要在压缩或解压档案时可选的。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>-z：有gzip属性的
+</span></span><span style="display:flex;"><span>-j：有bz2属性的
+</span></span><span style="display:flex;"><span>-Z：有compress属性的
+</span></span><span style="display:flex;"><span>-v：显示所有过程
+</span></span><span style="display:flex;"><span>-O：将文件解开到标准输出
+</span></span></code></pre></div><p>3.下面的参数-f是必须的</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># -f: 使用档案名字，切记，这个参数是最后一个参数，后面只能接档案名。</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 这条命令是将所有.jpg的文件打成一个名为all.tar的包。-c是表示产生新的包，-f指定包的文件名。</span>
+</span></span><span style="display:flex;"><span>tar -cf all.tar *.jpg
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 这条命令是将所有.gif的文件增加到all.tar的包里面去。-r是表示增加文件的意思。</span>
+</span></span><span style="display:flex;"><span>tar -rf all.tar *.gif
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 这条命令是更新原来tar包all.tar中logo.gif文件，-u是表示更新文件的意思。</span>
+</span></span><span style="display:flex;"><span>tar -uf all.tar logo.gif
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 这条命令是列出all.tar包中所有文件，-t是列出文件的意思</span>
+</span></span><span style="display:flex;"><span>tar -tf all.tar
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 这条命令是解出all.tar包中所有文件，-x是解开的意思</span>
+</span></span><span style="display:flex;"><span>tar -xf all.tar
+</span></span></code></pre></div><p>4.压缩</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>tar -cvf jpg.tar *.jpg //将目录里所有jpg文件打包成tar.jpg 
+</span></span><span style="display:flex;"><span>tar -czf jpg.tar.gz *.jpg   //将目录里所有jpg文件打包成jpg.tar后，并且将其用gzip压缩，生成一个gzip压缩过的包，命名为jpg.tar.gz
+</span></span><span style="display:flex;"><span>tar -cjf jpg.tar.bz2 *.jpg //将目录里所有jpg文件打包成jpg.tar后，并且将其用bzip2压缩，生成一个bzip2压缩过的包，命名为jpg.tar.bz2
+</span></span><span style="display:flex;"><span>tar -cZf jpg.tar.Z *.jpg   //将目录里所有jpg文件打包成jpg.tar后，并且将其用compress压缩，生成一个umcompress压缩过的包，命名为jpg.tar.Z
+</span></span><span style="display:flex;"><span>rar a jpg.rar *.jpg //rar格式的压缩，需要先下载rar <span style="color:#66d9ef">for</span> linux
+</span></span><span style="display:flex;"><span>zip jpg.zip *.jpg //zip格式的压缩，需要先下载zip <span style="color:#66d9ef">for</span> linux
+</span></span></code></pre></div><p>5.解压</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>tar -xvf file.tar //解压 tar包
+</span></span><span style="display:flex;"><span>tar -xzvf file.tar.gz //解压tar.gz
+</span></span><span style="display:flex;"><span>tar -xjvf file.tar.bz2   //解压 tar.bz2
+</span></span><span style="display:flex;"><span>tar -xZvf file.tar.Z   //解压tar.Z
+</span></span><span style="display:flex;"><span>unrar e file.rar //解压rar
+</span></span><span style="display:flex;"><span>unzip file.zip //解压zip
+</span></span></code></pre></div><p>6.总结</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>1、*.tar 用 tar -xvf 解压
+</span></span><span style="display:flex;"><span>2、*.gz 用 gzip -d或者gunzip 解压
+</span></span><span style="display:flex;"><span>3、*.tar.gz和*.tgz 用 tar -xzf 解压
+</span></span><span style="display:flex;"><span>4、*.bz2 用 bzip2 -d或者用bunzip2 解压
+</span></span><span style="display:flex;"><span>5、*.tar.bz2用tar -xjf 解压
+</span></span><span style="display:flex;"><span>6、*.Z 用 uncompress 解压
+</span></span><span style="display:flex;"><span>7、*.tar.Z 用tar -xZf 解压
+</span></span><span style="display:flex;"><span>8、*.rar 用 unrar e解压
+</span></span><span style="display:flex;"><span>9、*.zip 用 unzip 解压
+</span></span></code></pre></div><h2 id="5-linux下动态查看日志">5. linux下动态查看日志</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>tail -f fileName
+</span></span></code></pre></div><h2 id="6-服务自启动">6. 服务自启动</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@localhost ~<span style="color:#f92672">]</span>chkconfig smb on
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#or</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>root@localhost ~<span style="color:#f92672">]</span><span style="color:#75715e"># vi /etc/rc.local</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># This script will be executed *after* all the other init scripts.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># You can put your own initialization stuff in here if you don&#39;t</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># want to do the full Sys V style init stuff.</span>
+</span></span><span style="display:flex;"><span>service smb start
+</span></span></code></pre></div><h2 id="7网卡配置">7.网卡配置</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>ifdown eth3 <span style="color:#f92672">&amp;&amp;</span> ifup eth3
+</span></span><span style="display:flex;"><span>service network restart
+</span></span></code></pre></div><h2 id="8vi编辑器の操作">8.vi编辑器の操作</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>a   //在当前字符后添加文本
+</span></span><span style="display:flex;"><span>A   //在行末添加文本
+</span></span><span style="display:flex;"><span>i   //在当前字符前插入文本
+</span></span><span style="display:flex;"><span>I   //在当前行首插入文本
+</span></span><span style="display:flex;"><span>o   //在当前行后面插入一空行
+</span></span><span style="display:flex;"><span>O   //在当前行前面插入一空行
+</span></span><span style="display:flex;"><span>/字符串 //往下查找字符串
+</span></span><span style="display:flex;"><span>		n   //往下跳到下一个匹配位置
+</span></span><span style="display:flex;"><span>		N   //往上跳到下一个匹配位置
+</span></span><span style="display:flex;"><span>?字符串 //往上匹配字符串（与<span style="color:#e6db74">&#39;/字符串&#39;</span>操作相反）
+</span></span><span style="display:flex;"><span>p   //粘贴文本操作，用于将缓存区的内容粘贴到当前光标所在位置的下方
+</span></span><span style="display:flex;"><span>P   //粘贴文本操作，用于将缓存区的内容粘贴到当前光标所在位置的上方
+</span></span><span style="display:flex;"><span>Ctrl+u  //向文件首翻半屏
+</span></span><span style="display:flex;"><span>Ctrl+d  //向文件尾翻半屏
+</span></span><span style="display:flex;"><span>Ctrl+f  //向文件尾翻一屏
+</span></span><span style="display:flex;"><span>Ctrl+b  //向文件首翻一屏；
+</span></span><span style="display:flex;"><span>Esc     //从编辑模式切换到命令模式；
+</span></span><span style="display:flex;"><span>ZZ      //命令模式下保存当前文件所做的修改后退出vi；
+</span></span><span style="display:flex;"><span>:行号   //光标跳转到指定行的行首；
+</span></span><span style="display:flex;"><span>:$      //光标跳转到最后一行的行首；
+</span></span><span style="display:flex;"><span>x或X    //删除一个字符，x删除光标后的，而X删除光标前的；
+</span></span><span style="display:flex;"><span>D       //删除从当前光标到光标所在行尾的全部字符；
+</span></span><span style="display:flex;"><span>dd      //删除光标行正行内容；
+</span></span><span style="display:flex;"><span>ndd     //删除当前行及其后n-1行；
+</span></span><span style="display:flex;"><span>nyy     //当前行及其下n行的内容保存到寄存器？中，其中？为一个字母，n为一个数字；
+</span></span><span style="display:flex;"><span>gg      //让光标移到首行，在vim才有效，vi中无效
+</span></span><span style="display:flex;"><span>G       //光标移到最后一行
+</span></span><span style="display:flex;"><span>V       //是进入Visual<span style="color:#f92672">(</span>可视）模式
+</span></span><span style="display:flex;"><span>dG      //全部删除
+</span></span><span style="display:flex;"><span>ggyG    //全部复制
+</span></span><span style="display:flex;"><span>ggVG    //全选
+</span></span><span style="display:flex;"><span>		d       //删除选中
+</span></span><span style="display:flex;"><span>		y       //复制选中内容到0号寄存器
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;+y     //复制选中内容到＋寄存器，也就是系统的剪贴板，供其他程序用
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">gg&#34;</span>+yG  //要复制到别的地方，用 <span style="color:#e6db74">&#34;+y 来复制
+</span></span></span></code></pre></div><h2 id="9时间戳">9.时间戳</h2>
+<pre tabindex="0"><code>date    //获取当前系统时间
+date -d &#39;@1526973325&#39;   //将时间戳转换为时间
+</code></pre><h2 id="10文件比较之diff">10.文件比较之&rsquo;diff'</h2>
+<h2 id="11-linux-从一个ip机器跳转至另一ip机器-ssh">11. linux 从一个IP机器跳转至另一IP机器: ssh</h2>
+<p>ssh – OpenSSH remote login client</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ man ssh
+</span></span><span style="display:flex;"><span>	NAME
+</span></span><span style="display:flex;"><span>	     ssh – OpenSSH remote login client
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	SYNOPSIS
+</span></span><span style="display:flex;"><span>	     ssh <span style="color:#f92672">[</span>-46AaCfGgKkMNnqsTtVvXxYy<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-B bind_interface<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-b bind_address<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-c cipher_spec<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-D <span style="color:#f92672">[</span>bind_address:<span style="color:#f92672">]</span>port<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-E log_file<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-e escape_char<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-F configfile<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-I pkcs11<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-i identity_file<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-J destination<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>	         <span style="color:#f92672">[</span>-L address<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-l login_name<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-m mac_spec<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-O ctl_cmd<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-o option<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-p port<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-Q query_option<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-R address<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-S ctl_path<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-W host:port<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-w local_tun<span style="color:#f92672">[</span>:remote_tun<span style="color:#f92672">]]</span> destination <span style="color:#f92672">[</span>command <span style="color:#f92672">[</span>argument ...<span style="color:#f92672">]]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 示例</span>
+</span></span><span style="display:flex;"><span>ssh username@IP
+</span></span><span style="display:flex;"><span>password：
+</span></span></code></pre></div><h2 id="12-linux系统间的文件目录传输">12. linux系统间的文件（目录）传输</h2>
+<ul>
+<li>命令：scp 选项 参数</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>scp <span style="color:#e6db74">&#34;文件名&#34;</span>  <span style="color:#e6db74">&#34;用户名@计算机IP或者计算机名称:远程路径&#34;</span>      //将本地文件拷贝到远程
+</span></span><span style="display:flex;"><span>scp -r <span style="color:#e6db74">&#34;目录名&#34;</span>  <span style="color:#e6db74">&#34;用户名@计算机IP或者计算机名称:远程路径&#34;</span>   //将本地目录拷贝到远程
+</span></span><span style="display:flex;"><span>scp <span style="color:#e6db74">&#34;用户名@计算机IP或者计算机名称:文件名&#34;</span>  <span style="color:#e6db74">&#34;本地路径&#34;</span>      //从远程将文件拷回本地
+</span></span><span style="display:flex;"><span>scp -r <span style="color:#e6db74">&#34;用户名@计算机IP或者计算机名称:目录名&#34;</span>  <span style="color:#e6db74">&#34;本地路径&#34;</span>   //从远程将目录拷回本地
+</span></span><span style="display:flex;"><span>    -a	尽可能将档案状态、权限等资料都照原状予以复制
+</span></span><span style="display:flex;"><span>    -r	若 source 中含有目录名，则将目录下之档案亦皆依序拷贝至目的地
+</span></span><span style="display:flex;"><span>    -f	若目的地已经有相同档名的档案存在，则在复制前先予以删除再行复制
+</span></span><span style="display:flex;"><span>    -v	和大多数 linux 命令中的 -v 意思一样 , 用来显示进度 . 可以用来查看连接 , 认证 , 或是配置错误
+</span></span><span style="display:flex;"><span>    -C	使能压缩选项
+</span></span><span style="display:flex;"><span>    -P	选择端口 . 注意 -p 已经被 rcp 使用
+</span></span><span style="display:flex;"><span>    -4	强行使用 IPV4 地址
+</span></span><span style="display:flex;"><span>    -6	强行使用 IPV6 地址
+</span></span></code></pre></div><h2 id="13-linux-centos7-关于防火墙操作">13. linux centos7 关于防火墙操作</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># 在root权限下查看防火墙状态。 </span>
+</span></span><span style="display:flex;"><span>systemctl status firewalld
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 临时关闭防火墙命令。重启电脑后，防火墙自动起来。 </span>
+</span></span><span style="display:flex;"><span>systemctl stop firewalld
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 永久关闭防火墙命令。重启后，防火墙不会自动启动。 </span>
+</span></span><span style="display:flex;"><span>systemctl disable firewalld
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 打开防火墙命令。 </span>
+</span></span><span style="display:flex;"><span>systemctl enable firewalld
+</span></span></code></pre></div>]]></content></item><item><title>部署｜linux下java环境部署</title><link>https://hesoong.github.io/posts/java-deployment-under-linux/</link><pubDate>Sun, 13 Jan 2019 13:03:24 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/java-deployment-under-linux/</guid><description>下载JDK安装包 &amp;ndash;&amp;gt;jdk下载官网&amp;lt;&amp;ndash; &amp;ndash;&amp;gt;jdk历史版本下载&amp;lt;&amp;ndash; 根据</description><content type="html"><![CDATA[<h2 id="下载jdk安装包">下载JDK安装包</h2>
+<p>&ndash;&gt;<a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">jdk下载官网</a>&lt;&ndash;</p>
+<p>&ndash;&gt;<a href="https://www.oracle.com/technetwork/java/javase/downloads/java-archive-javase8-2177648.html">jdk历史版本下载</a>&lt;&ndash;</p>
+<p>根据自己的系统版本下载*.tar.gz结尾的压缩包， 我这里下载的是 jdk-8u151-linux-i586.tar.gz 安装包</p>
+<h2 id="解压缩">解压缩</h2>
+<p>将下载的安装包放到自定义路径下，我这里放到的 <strong>/opt</strong> 下
+然后就是解压了，linux下的解压命令是</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>tar -zxvf jdk-8u151-linux-i586.tar.gz
+</span></span></code></pre></div><h2 id="配置环境变量">配置环境变量</h2>
+<p>配置系统的环境变量：编辑 <strong>vim /etc/profile</strong> 文件，若执行命令提示没有 <strong>vim</strong> 时，用 <strong>vi</strong> 代替即可，也可以用如下命令安装即可</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span> yum -y install vim
+</span></span></code></pre></div><p>编辑环境变量：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>vim  /etc/profile
+</span></span></code></pre></div><p>然后在文件的最后加上如下配置：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#java</span>
+</span></span><span style="display:flex;"><span>export JAVA_HOME<span style="color:#f92672">=</span>/opt/jdk1.8.0_151
+</span></span><span style="display:flex;"><span>export JRE_HOME<span style="color:#f92672">=</span>$JAVA_HOME/jre
+</span></span><span style="display:flex;"><span>export CLASSPATH<span style="color:#f92672">=</span>.:$JAVA_HOME/lib:$JRE_HOME/lib
+</span></span><span style="display:flex;"><span>export PATH<span style="color:#f92672">=</span>$JAVA_HOME/bin:$PATH
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#java end</span>
+</span></span></code></pre></div><p>重新加载文件让其生效</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>source /etc/profile
+</span></span></code></pre></div><h2 id="检查是否配置成功">检查是否配置成功</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>java -verison
+</span></span></code></pre></div><p>如下显示即安装成功</p>
+<p><img src="%E6%A3%80%E6%9F%A5%E9%85%8D%E7%BD%AE.png" alt="检查配置"></p>
+]]></content></item><item><title>Samba在linux上的使用</title><link>https://hesoong.github.io/posts/samba%E4%BD%BF%E7%94%A8/</link><pubDate>Thu, 10 Jan 2019 00:00:00 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/samba%E4%BD%BF%E7%94%A8/</guid><description>1.安装 sudo yum -y install samba 2.配置 /etc/samba/smb.conf eg: [global] workgroup = Administrators netblos name = server string = Linux Samba Server TestServer security = share display charset=UTF-8 unix charset=UTF-8 dos charset=UTF-8 [share] #====&amp;gt;windows下显示的共享文件夹名字：sha</description><content type="html"><![CDATA[<h2 id="1安装">1.安装</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>sudo yum -y install samba
+</span></span></code></pre></div><h2 id="2配置">2.配置</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-conf" data-lang="conf"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">/</span>etc<span style="color:#960050;background-color:#1e0010">/</span>samba<span style="color:#960050;background-color:#1e0010">/</span>smb.conf
+</span></span><span style="display:flex;"><span>eg<span style="color:#960050;background-color:#1e0010">:</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">[</span>global<span style="color:#960050;background-color:#1e0010">]</span>
+</span></span><span style="display:flex;"><span>workgroup <span style="color:#f92672">=</span> Administrators
+</span></span><span style="display:flex;"><span>netblos name <span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>server string <span style="color:#f92672">=</span> Linux Samba Server TestServer
+</span></span><span style="display:flex;"><span>security <span style="color:#f92672">=</span> share
+</span></span><span style="display:flex;"><span>display charset<span style="color:#f92672">=</span>UTF-8
+</span></span><span style="display:flex;"><span>unix charset<span style="color:#f92672">=</span>UTF-8
+</span></span><span style="display:flex;"><span>dos charset<span style="color:#f92672">=</span>UTF-8
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">[</span>share<span style="color:#960050;background-color:#1e0010">]</span> <span style="color:#75715e">#====&gt;windows下显示的共享文件夹名字：share
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>path <span style="color:#f92672">=</span> <span style="color:#960050;background-color:#1e0010">/</span>opt
+</span></span><span style="display:flex;"><span>writeable <span style="color:#f92672">=</span> yes
+</span></span><span style="display:flex;"><span>browseable <span style="color:#f92672">=</span> yes
+</span></span><span style="display:flex;"><span>guest ok <span style="color:#f92672">=</span> yes
+</span></span></code></pre></div><h2 id="3启动服务">3.启动服务</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>service smb start
+</span></span></code></pre></div><h2 id="3-开机自启动">3. 开机自启动</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#f92672">[</span>root@localhost ~<span style="color:#f92672">]</span>$ vi /etc/rc.local
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># This script will be executed *after* all the other init scripts.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># You can put your own initialization stuff in here if you don&#39;t</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># want to do the full Sys V style init stuff.</span>
+</span></span><span style="display:flex;"><span>service smb start
+</span></span></code></pre></div><h2 id="遇到的问题">遇到的问题</h2>
+<ul>
+<li>SELinux linux安全策略</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># 1. 关闭SELinux</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>vim /etc/sysconfig/selinux
+</span></span><span style="display:flex;"><span>vim /etc/selinux/config
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">##把SELINUX=enforcing 改为 SELINUX=disabled</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">##临时关闭SELinux</span>
+</span></span><span style="display:flex;"><span>setenforce <span style="color:#ae81ff">0</span>
+</span></span></code></pre></div><ul>
+<li>防火墙导致samba连接不了的问题</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#2. 关闭防火墙</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 关闭iptables</span>
+</span></span><span style="display:flex;"><span>/etc/init.d/iptables stop
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 永久关闭</span>
+</span></span><span style="display:flex;"><span>chkconfig iptables off
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">## 检查</span>
+</span></span><span style="display:flex;"><span>chkconfig --list iptables
+</span></span></code></pre></div><ul>
+<li>文件夹权限</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#3. 检查文件夹权限</span>
+</span></span><span style="display:flex;"><span>chmod <span style="color:#ae81ff">777</span> /opt
+</span></span></code></pre></div>]]></content></item><item><title>笔记｜IP 获取</title><link>https://hesoong.github.io/posts/ip%E8%8E%B7%E5%8F%96/</link><pubDate>Wed, 31 Oct 2018 00:00:00 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/ip%E8%8E%B7%E5%8F%96/</guid><description>获取本机ip 通过NetworkInterface获取 String ip = request.getRemoteAddr(); System.out.println(&amp;#34;---&amp;gt;&amp;#34;+ip); Enumeration&amp;lt;NetworkInterface&amp;gt; n = NetworkInterface.getNetworkInterfaces(); for (; n.hasMoreElements();) { NetworkInterface e = n.nextElement(); System.out.println(&amp;#34;Interface: &amp;#34; + e.getName()); Enumeration&amp;lt;InetAddress&amp;gt; a = e.getInetAddresses(); for (; a.hasMoreElements();) { InetAddress addr = a.nextElement(); if (!addr.isLinkLocalAddress() &amp;amp;&amp;amp; !addr.isLoopbackAddress() &amp;amp;&amp;amp; addr instanceof Inet4Address) { System.out.println(&amp;#34; &amp;#34;</description><content type="html"><![CDATA[<h2 id="获取本机ip">获取本机ip</h2>
+<p>通过<code>NetworkInterface</code>获取</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>String ip <span style="color:#f92672">=</span> request<span style="color:#f92672">.</span><span style="color:#a6e22e">getRemoteAddr</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;---&gt;&#34;</span><span style="color:#f92672">+</span>ip<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>Enumeration<span style="color:#f92672">&lt;</span>NetworkInterface<span style="color:#f92672">&gt;</span> n <span style="color:#f92672">=</span> NetworkInterface<span style="color:#f92672">.</span><span style="color:#a6e22e">getNetworkInterfaces</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#f92672">(;</span> n<span style="color:#f92672">.</span><span style="color:#a6e22e">hasMoreElements</span><span style="color:#f92672">();)</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	NetworkInterface e <span style="color:#f92672">=</span> n<span style="color:#f92672">.</span><span style="color:#a6e22e">nextElement</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>	System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Interface: &#34;</span> <span style="color:#f92672">+</span> e<span style="color:#f92672">.</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">());</span>
+</span></span><span style="display:flex;"><span>	Enumeration<span style="color:#f92672">&lt;</span>InetAddress<span style="color:#f92672">&gt;</span> a <span style="color:#f92672">=</span> e<span style="color:#f92672">.</span><span style="color:#a6e22e">getInetAddresses</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#f92672">(;</span> a<span style="color:#f92672">.</span><span style="color:#a6e22e">hasMoreElements</span><span style="color:#f92672">();)</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>		InetAddress addr <span style="color:#f92672">=</span> a<span style="color:#f92672">.</span><span style="color:#a6e22e">nextElement</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>addr<span style="color:#f92672">.</span><span style="color:#a6e22e">isLinkLocalAddress</span><span style="color:#f92672">()</span> 
+</span></span><span style="display:flex;"><span>				<span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>addr<span style="color:#f92672">.</span><span style="color:#a6e22e">isLoopbackAddress</span><span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#f92672">&amp;&amp;</span> addr <span style="color:#66d9ef">instanceof</span> Inet4Address<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>					System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;  &#34;</span> <span style="color:#f92672">+</span> addr<span style="color:#f92672">.</span><span style="color:#a6e22e">getHostAddress</span><span style="color:#f92672">());</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><h2 id="根据网卡获取ip">根据网卡获取ip</h2>
+<p>根据物理网卡获取本机IP</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * 根据网卡获得IP地址
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @return
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @throws SocketException
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @throws UnknownHostException
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> String <span style="color:#a6e22e">getIpAdd</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> SocketException<span style="color:#f92672">,</span> UnknownHostException <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>	String LOCAL_HOST_IP <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;127.0.0.1&#34;</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>	String ip <span style="color:#f92672">=</span> LOCAL_HOST_IP<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>Enumeration<span style="color:#f92672">&lt;</span>NetworkInterface<span style="color:#f92672">&gt;</span> en <span style="color:#f92672">=</span> NetworkInterface<span style="color:#f92672">.</span><span style="color:#a6e22e">getNetworkInterfaces</span><span style="color:#f92672">();</span> en<span style="color:#f92672">.</span><span style="color:#a6e22e">hasMoreElements</span><span style="color:#f92672">();)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>		NetworkInterface intf <span style="color:#f92672">=</span> en<span style="color:#f92672">.</span><span style="color:#a6e22e">nextElement</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>		String name <span style="color:#f92672">=</span> intf<span style="color:#f92672">.</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>name<span style="color:#f92672">.</span><span style="color:#a6e22e">contains</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;docker&#34;</span><span style="color:#f92672">)</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>name<span style="color:#f92672">.</span><span style="color:#a6e22e">contains</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;lo&#34;</span><span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>Enumeration<span style="color:#f92672">&lt;</span>InetAddress<span style="color:#f92672">&gt;</span> enumIpAddr <span style="color:#f92672">=</span> intf<span style="color:#f92672">.</span><span style="color:#a6e22e">getInetAddresses</span><span style="color:#f92672">();</span> enumIpAddr<span style="color:#f92672">.</span><span style="color:#a6e22e">hasMoreElements</span><span style="color:#f92672">();)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#75715e">// 获得IP
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>				InetAddress inetAddress <span style="color:#f92672">=</span> enumIpAddr<span style="color:#f92672">.</span><span style="color:#a6e22e">nextElement</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>inetAddress<span style="color:#f92672">.</span><span style="color:#a6e22e">isLoopbackAddress</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>					String ipaddress <span style="color:#f92672">=</span> inetAddress<span style="color:#f92672">.</span><span style="color:#a6e22e">getHostAddress</span><span style="color:#f92672">().</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>ipaddress<span style="color:#f92672">.</span><span style="color:#a6e22e">contains</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;::&#34;</span><span style="color:#f92672">)</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>ipaddress<span style="color:#f92672">.</span><span style="color:#a6e22e">contains</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;0:0:&#34;</span><span style="color:#f92672">)</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>ipaddress<span style="color:#f92672">.</span><span style="color:#a6e22e">contains</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;fe80&#34;</span><span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>						logger<span style="color:#f92672">.</span><span style="color:#a6e22e">debug</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;IP:&#34;</span> <span style="color:#f92672">+</span> ipaddress<span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>						<span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>LOCAL_HOST_IP<span style="color:#f92672">.</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span>ipaddress<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>							<span style="color:#66d9ef">return</span> ipaddress<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>						<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>					<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> ip<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="ip转换为int">IP转换为int</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">toIp</span><span style="color:#f92672">(</span>String ipAddress<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        String<span style="color:#f92672">[]</span> address <span style="color:#f92672">=</span> StringUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">split</span><span style="color:#f92672">(</span>ipAddress<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;.&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>address<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span> <span style="color:#f92672">!=</span> 4<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            StringBuilder builder <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> StringBuilder<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>            builder<span style="color:#f92672">.</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Invalid IP format \&#34;&#34;</span><span style="color:#f92672">).</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span>ipAddress<span style="color:#f92672">).</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;\&#34;, should be XXX.XXX.XXX.XXX&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalArgumentException<span style="color:#f92672">(</span>builder<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">());</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> result <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> address<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">;</span> <span style="color:#f92672">++</span>i<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">int</span> segment <span style="color:#f92672">=</span> Integer<span style="color:#f92672">.</span><span style="color:#a6e22e">parseInt</span><span style="color:#f92672">(</span>address<span style="color:#f92672">[</span>i<span style="color:#f92672">]);</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>segment <span style="color:#f92672">&lt;</span> 0 <span style="color:#f92672">||</span> segment <span style="color:#f92672">&gt;=</span> 256<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                    StringBuilder builder <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> StringBuilder<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>                    builder<span style="color:#f92672">.</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Invalid IP format \&#34;&#34;</span><span style="color:#f92672">).</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span>ipAddress<span style="color:#f92672">).</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;\&#34;&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalArgumentException<span style="color:#f92672">(</span>builder<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">());</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                result <span style="color:#f92672">=</span> result <span style="color:#f92672">&lt;&lt;</span> 8 <span style="color:#f92672">|</span> segment<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> result<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span></code></pre></div>]]></content></item><item><title>笔记｜Gradle笔记</title><link>https://hesoong.github.io/posts/gradle%E7%AC%94%E8%AE%B0/</link><pubDate>Sun, 26 Aug 2018 17:10:50 +0800</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/gradle%E7%AC%94%E8%AE%B0/</guid><description>gradle 国内镜像配置 单项目 对单个项目生效，在项目中的build.gradle修改内容 buildscript { repositories { maven { url &amp;#39;http://maven.aliyun.com/nexus/content/groups/public/&amp;#39; } maven{ url &amp;#39;http://maven.aliyun.com/nexus/content/repositories/jcenter&amp;#39;} } dependencies { classpath &amp;#39;com.android.tools.build:gradle:2.2.3&amp;#39; // NOTE: Do not place your application dependencies here; they belong // in the</description><content type="html"><![CDATA[<h2 id="gradle-国内镜像配置">gradle 国内镜像配置</h2>
+<h3 id="单项目">单项目</h3>
+<p>对单个项目生效，在项目中的build.gradle修改内容</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span>buildscript <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    repositories <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        maven <span style="color:#f92672">{</span> url <span style="color:#e6db74">&#39;http://maven.aliyun.com/nexus/content/groups/public/&#39;</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>                maven<span style="color:#f92672">{</span> url <span style="color:#e6db74">&#39;http://maven.aliyun.com/nexus/content/repositories/jcenter&#39;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    dependencies <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        classpath <span style="color:#e6db74">&#39;com.android.tools.build:gradle:2.2.3&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// NOTE: Do not place your application dependencies here; they belong
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#75715e">// in the individual module build.gradle files
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>        
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>allprojects <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    repositories <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        maven <span style="color:#f92672">{</span> url <span style="color:#e6db74">&#39;http://maven.aliyun.com/nexus/content/groups/public/&#39;</span> <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        maven<span style="color:#f92672">{</span> url <span style="color:#e6db74">&#39;http://maven.aliyun.com/nexus/content/repositories/jcenter&#39;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="全局">全局</h3>
+<p>对所有项目生效，在<code>${USER_HOME}/.gradle/</code>下创建<code>init.gradle</code>文件</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span>allprojects<span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    repositories <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">def</span> ALIYUN_REPOSITORY_URL <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://maven.aliyun.com/nexus/content/groups/public&#39;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">def</span> ALIYUN_JCENTER_URL <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://maven.aliyun.com/nexus/content/repositories/jcenter&#39;</span>
+</span></span><span style="display:flex;"><span>        all <span style="color:#f92672">{</span> ArtifactRepository repo <span style="color:#f92672">-&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>repo <span style="color:#66d9ef">instanceof</span> MavenArtifactRepository<span style="color:#f92672">){</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">def</span> url <span style="color:#f92672">=</span> repo<span style="color:#f92672">.</span><span style="color:#a6e22e">url</span><span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">()</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>url<span style="color:#f92672">.</span><span style="color:#a6e22e">startsWith</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#39;https://repo1.maven.org/maven2&#39;</span><span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                    project<span style="color:#f92672">.</span><span style="color:#a6e22e">logger</span><span style="color:#f92672">.</span><span style="color:#a6e22e">lifecycle</span> <span style="color:#e6db74">&#34;Repository ${repo.url} replaced by $ALIYUN_REPOSITORY_URL.&#34;</span>
+</span></span><span style="display:flex;"><span>                    remove repo
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>url<span style="color:#f92672">.</span><span style="color:#a6e22e">startsWith</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#39;https://jcenter.bintray.com/&#39;</span><span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                    project<span style="color:#f92672">.</span><span style="color:#a6e22e">logger</span><span style="color:#f92672">.</span><span style="color:#a6e22e">lifecycle</span> <span style="color:#e6db74">&#34;Repository ${repo.url} replaced by $ALIYUN_JCENTER_URL.&#34;</span>
+</span></span><span style="display:flex;"><span>                    remove repo
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        maven <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            url ALIYUN_REPOSITORY_URL
+</span></span><span style="display:flex;"><span>            url ALIYUN_JCENTER_URL
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><h2 id="相关命令">相关命令</h2>
+<h3 id="gradle命令查看目录树">gradle命令查看目录树</h3>
+<p>如果存在依赖冲突，在默认情况下，Gradle会选择最新版本，这和Maven是不同的，Maven会选择离依赖树最近的版本。当然，我们可以通过设置<code>Configuration</code>的<code>resolutionStrategy</code>来重新设置依赖冲突的处理规则，对此本文将不予讲解。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># gradle 查看目录树</span>
+</span></span><span style="display:flex;"><span>gradle dependencies
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># gradle 输出目录树到text.txt文件</span>
+</span></span><span style="display:flex;"><span>gradle dependencies &gt; text.txt
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#gradlew 查看目录树输出到文件</span>
+</span></span><span style="display:flex;"><span>gradlew -q :dependencies &gt; text.txt
+</span></span></code></pre></div><h2 id="gradle脚本">gradle脚本</h2>
+<h3 id="变量要用双引号">变量要用双引号</h3>
+<p>如：version: &ldquo;$springBootVersion&rdquo;</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span>ext <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  springBootVersion <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;2.0.4.RELEASE&#34;</span>
+</span></span><span style="display:flex;"><span>  fastJsonVersion <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;1.2.35&#34;</span>
+</span></span><span style="display:flex;"><span>  druidVersion <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;1.0.26&#34;</span>
+</span></span><span style="display:flex;"><span>  bootRedisVersion <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;2.0.4.RELEASE&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>dependencies <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//compile(&#34;org.springframework.boot:spring-boot-starter-web&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">//testCompile(&#39;org.springframework.boot:spring-boot-starter-test&#39;)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    testCompile group: <span style="color:#e6db74">&#39;org.springframework.boot&#39;</span><span style="color:#f92672">,</span> name: <span style="color:#e6db74">&#39;spring-boot-starter-test&#39;</span><span style="color:#f92672">,</span> version: <span style="color:#e6db74">&#34;$springBootVersion&#34;</span>
+</span></span><span style="display:flex;"><span>    compile group: <span style="color:#e6db74">&#39;org.springframework.boot&#39;</span><span style="color:#f92672">,</span> name: <span style="color:#e6db74">&#39;spring-boot-starter-web&#39;</span><span style="color:#f92672">,</span> version: <span style="color:#e6db74">&#34;$springBootVersion&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// This dependency is exported to consumers, that is to say found on their compile classpath.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    api <span style="color:#e6db74">&#39;org.apache.commons:commons-math3:3.6.1&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// This dependency is used internally, and not exposed to consumers on their own compile classpath.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    implementation <span style="color:#e6db74">&#39;com.google.guava:guava:23.0&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Use JUnit test framework
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">//testImplementation &#39;junit:junit:4.12&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    testCompile group: <span style="color:#e6db74">&#39;junit&#39;</span><span style="color:#f92672">,</span> name: <span style="color:#e6db74">&#39;junit&#39;</span><span style="color:#f92672">,</span> version: <span style="color:#e6db74">&#39;4.12&#39;</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    compile group: <span style="color:#e6db74">&#39;org.postgresql&#39;</span><span style="color:#f92672">,</span> name: <span style="color:#e6db74">&#39;postgresql&#39;</span><span style="color:#f92672">,</span> version: <span style="color:#e6db74">&#39;9.4.1212&#39;</span>
+</span></span><span style="display:flex;"><span> compile<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion&#34;</span><span style="color:#f92672">){</span>
+</span></span><span style="display:flex;"><span>    exclude <span style="color:#f92672">(</span>module: <span style="color:#e6db74">&#34;xml-apis&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    compile group: <span style="color:#e6db74">&#39;org.projectlombok&#39;</span><span style="color:#f92672">,</span> name: <span style="color:#e6db74">&#39;lombok&#39;</span><span style="color:#f92672">,</span> version: <span style="color:#e6db74">&#39;1.16.20&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div>]]></content></item><item><title>windows相关</title><link>https://hesoong.github.io/posts/windows%E7%AC%94%E8%AE%B0/</link><pubDate>Tue, 31 Oct 2017 00:00:00 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/windows%E7%AC%94%E8%AE%B0/</guid><description>Windows关闭/开启管理员用户 # 管理员权限进入cmd net user administrator /active:tes // 开启 net user administrator /active:no // 关闭 Windows批处理（.bat） .bat脚本示例 @echo off rem 准</description><content type="html"><![CDATA[<h2 id="windows关闭开启管理员用户">Windows关闭/开启管理员用户</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 管理员权限进入cmd</span>
+</span></span><span style="display:flex;"><span>net user administrator /active:tes // 开启
+</span></span><span style="display:flex;"><span>net user administrator /active:no // 关闭
+</span></span></code></pre></div><h2 id="windows批处理bat">Windows批处理（.bat）</h2>
+<h3 id="bat脚本示例">.bat脚本示例</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>@echo off
+</span></span><span style="display:flex;"><span>rem 准备运行uxdb
+</span></span><span style="display:flex;"><span>cd <span style="color:#e6db74">&#34;D:\Program Files\UXDB\dbsql\bin&#34;</span> 
+</span></span><span style="display:flex;"><span>d:
+</span></span><span style="display:flex;"><span>start uxdbStart.bat
+</span></span><span style="display:flex;"><span>rem 准备运行redis
+</span></span><span style="display:flex;"><span>cd <span style="color:#e6db74">&#34;C:\Program Files\Redis\&#34; 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">c:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">start redisStart.bat
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">rem 准备运行activemq
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">cd C:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">cd C:\Users\bms\Desktop\apache\apache-activemq-5.10.0\bin\ 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">start activeMQStart.bat
+</span></span></span></code></pre></div><h3 id="note">Note</h3>
+<ol>
+<li>切换盘符：</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 同一盘符可以随意切换</span>
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\b</span>ms&gt;cd <span style="color:#e6db74">&#34;C:\Program Files\Redis&#34;</span>  <span style="color:#75715e">#若当前盘符中有空格，需要将盘符路径用“”引起来，否则会出错</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 不同盘符的切换（比如当前在C盘）</span>
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\b</span>ms&gt;cd <span style="color:#e6db74">&#34;D:\Program Files\UXDB\dbsql\bin&#34;</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\b</span>ms&gt;       <span style="color:#75715e">#盘符并没有切换</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>C:<span style="color:#ae81ff">\U</span>sers<span style="color:#ae81ff">\b</span>ms&gt;d：    <span style="color:#75715e">#此时再输入要切换的盘符名并以：结束</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>D:<span style="color:#ae81ff">\P</span>rogram Files<span style="color:#ae81ff">\D</span>B<span style="color:#ae81ff">\d</span>bsql<span style="color:#ae81ff">\b</span>in&gt;    <span style="color:#75715e">#成功切换到目标目录</span>
+</span></span></code></pre></div><ol start="2">
+<li>批处理中启动另外批处理文件</li>
+</ol>
+<ul>
+<li>call ：启动一个成功或手动关闭后才会执行下一个bat文件</li>
+<li>start：不会发生阻塞，并行启动</li>
+</ul>
+<h2 id="windows配置服务命令行">Windows配置服务（命令行）</h2>
+<p>SC 是用于与服务控制管理器通信的命令行程序。
+用法:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sc &lt;server&gt; <span style="color:#f92672">[</span>command<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>service name<span style="color:#f92672">]</span> &lt;option1&gt; &lt;option2&gt;...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>选项 &lt;server&gt; 的格式为
+</span></span><span style="display:flex;"><span>可以键入 <span style="color:#e6db74">&#34;sc [command]&#34;</span>以获得命令的进一步帮助
+</span></span><span style="display:flex;"><span>命令:
+</span></span><span style="display:flex;"><span>    query---------------查询服务的状态，或枚举服务类型的状态。
+</span></span><span style="display:flex;"><span>    queryex------------查询服务的扩展状态， 或枚举服务类型的状态。
+</span></span><span style="display:flex;"><span>    start----------------启动服务。
+</span></span><span style="display:flex;"><span>     pause--------------发送 PAUSE 控制请求到服务。
+</span></span><span style="display:flex;"><span>    interrogate--------发送 INTERROGATE 控制请求到服务。
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">continue</span>-----------发送 CONTINUE 控制请求到服务。
+</span></span><span style="display:flex;"><span>    stop----------------发送 STOP 请求到服务。
+</span></span><span style="display:flex;"><span>    config--------------<span style="color:#f92672">(</span>永久地<span style="color:#f92672">)</span>更改服务的配置。
+</span></span><span style="display:flex;"><span>    description--------更改服务的描述。
+</span></span><span style="display:flex;"><span>    failure--------------更改服务失败时所进行的操作。
+</span></span><span style="display:flex;"><span>    qc-------------------查询服务的配置信息。
+</span></span><span style="display:flex;"><span>    qdescription-------查询服务的描述。
+</span></span><span style="display:flex;"><span>    qfailure-------------查询失败服务所进行的操作。
+</span></span><span style="display:flex;"><span>    delete---------------<span style="color:#f92672">(</span>从注册表<span style="color:#f92672">)</span>删除服务。
+</span></span><span style="display:flex;"><span>    create---------------创建服务<span style="color:#f92672">(</span>将其添加到注册表<span style="color:#f92672">)</span>。
+</span></span><span style="display:flex;"><span>    control--------------发送控制到服务。
+</span></span><span style="display:flex;"><span>    sdshow--------------显示服务的安全描述符。
+</span></span><span style="display:flex;"><span>    sdset----------------设置服务的安全描述符。
+</span></span><span style="display:flex;"><span>    GetDisplayName---获取服务的 DisplayName。
+</span></span><span style="display:flex;"><span>    GetKeyName--------获取服务的 ServiceKeyName。
+</span></span><span style="display:flex;"><span>    EnumDepend-------枚举服务的依存关系。
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>下列命令不查询服务名称:
+</span></span><span style="display:flex;"><span>sc &lt;server&gt; &lt;command&gt; &lt;option&gt;
+</span></span><span style="display:flex;"><span>    boot---------------<span style="color:#f92672">(</span>ok | bad<span style="color:#f92672">)</span> 表明是否将上一次启动保存为最后所知的好的启动配置
+</span></span><span style="display:flex;"><span>    Lock---------------锁定服务数据库
+</span></span><span style="display:flex;"><span>    QueryLock-------查询 SCManager 数据库的 LockStatus
+</span></span></code></pre></div><h3 id="使用">使用</h3>
+<p>在出现的命令行窗口(<strong>开始-&gt;运行-&gt;cmd</strong>)中输入sc
+使用<code>sc/?</code>命令，查询其它功能
+示例 1:注册服务(类似与linux中系统启动自动加载的东西)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sc create SVN binpath<span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;C:\Program Files\Subversion\bin\svnserve.exe --service -r D:\svn&#34;</span> displayname<span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Subversion Server&#34;</span> depend<span style="color:#f92672">=</span> Tcpip start<span style="color:#f92672">=</span> auto
+</span></span><span style="display:flex;"><span>    其中sc create是sc注册服务命令
+</span></span><span style="display:flex;"><span>    svn : 是服务注册时的键名
+</span></span><span style="display:flex;"><span>    binpath : 是服务加载程序启动文件的路径和命令参数
+</span></span><span style="display:flex;"><span>    displayname ：是服务显示名
+</span></span><span style="display:flex;"><span>    depend      ：传输依赖的协议
+</span></span><span style="display:flex;"><span>    start       ：是否自动启动
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    说明：上面的那个例子是注册一个svn的服务
+</span></span></code></pre></div><p>示例 2:启动服务</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sc start MyService
+</span></span></code></pre></div><h2 id="windows-相关操作">windows 相关操作</h2>
+<h3 id="1-远程桌面">1. 远程桌面</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mstsc
+</span></span></code></pre></div><h3 id="2-查看服务">2. 查看服务</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>win+R--&gt;services.msc
+</span></span></code></pre></div><h3 id="3-查看端口占用">3. 查看端口占用</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>netstat -ano | findstr <span style="color:#ae81ff">10086</span>
+</span></span></code></pre></div>]]></content></item><item><title>初入Hugo</title><link>https://hesoong.github.io/posts/hello-world/</link><pubDate>Sun, 29 Oct 2017 00:00:00 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/hello-world/</guid><description/><content type="html"></content></item></channel></rss>

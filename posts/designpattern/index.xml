@@ -1,0 +1,437 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>设计模式(系列) on Song's Blog</title><link>https://hesoong.github.io/posts/designpattern/</link><description>Recent content in 设计模式(系列) on Song's Blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>Mr.heesong@gmail.com (Song)</managingEditor><webMaster>Mr.heesong@gmail.com (Song)</webMaster><copyright>&lt;a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0&lt;/a></copyright><lastBuildDate>Sun, 03 May 2020 13:19:31 +0000</lastBuildDate><atom:link href="https://hesoong.github.io/posts/designpattern/index.xml" rel="self" type="application/rss+xml"/><item><title>设计模式-类图（第0篇）</title><link>https://hesoong.github.io/posts/designpattern/designpattern-0-classdiagram/</link><pubDate>Sun, 03 May 2020 13:19:31 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/designpattern/designpattern-0-classdiagram/</guid><description>类图六大关系 类与类之间的关系分为六种： 依赖（Dependence） 泛化/继承（Generalization） 实现（Implementatio</description><content type="html"><![CDATA[<h2 id="类图六大关系">类图六大关系</h2>
+<p>类与类之间的关系分为六种：</p>
+<ul>
+<li>依赖（Dependence）</li>
+<li>泛化/继承（Generalization）</li>
+<li>实现（Implementation）</li>
+<li>关联（Association）</li>
+<li>聚合（Aggregation）</li>
+<li>组合（Composition）</li>
+</ul>
+<h3 id="依赖关系dependence">依赖关系（Dependence）</h3>
+<p>只要类中用到了对方即构成依赖关系。</p>
+<ul>
+<li>类的成员属性</li>
+<li>方法的返回类型</li>
+<li>方法接收的参数类型</li>
+<li>方法内部使用到</li>
+</ul>
+<h3 id="泛化关系generalization">泛化关系（Generalization）</h3>
+<p>泛化关系其实就继承关系，它是依赖关系的特例</p>
+<h3 id="实现关系implementation">实现关系（Implementation）</h3>
+<p>实际上就是A类实现B类，实现关系是依赖关系的特例</p>
+<h3 id="关联关系association">关联关系（Association）</h3>
+<p>关联关系实际是 <em><strong>类与类之间的联系，他是依赖关系的特例</strong></em></p>
+<p>特点： 具有导航性：即单向关系与双向关系
+具有多重性： 0 ， 1 ， *</p>
+<h3 id="聚合关系aggregation">聚合关系（Aggregation）</h3>
+<p>聚合关系表示整体与部分的关系，<em><strong>部分可以与整体分开</strong></em>。
+聚合关系是关联关系的特例,因此也具有导航性与多重性</p>
+<p>eg: person 与 IDCard 的关系</p>
+<h3 id="组合关系composition">组合关系（Composition）</h3>
+<p>也是整体与部分的关系，只是<em><strong>整体与部分不可分开</strong></em></p>
+<p>eg: person 与 head 的关系</p>
+]]></content></item><item><title>设计模式-概览与分类（第1篇）</title><link>https://hesoong.github.io/posts/designpattern/designpattern-1-overview/</link><pubDate>Sun, 03 May 2020 13:53:43 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/designpattern/designpattern-1-overview/</guid><description>设计模式的七大设计原则 单一职责原则：一个类应该只负责一项职责； 接口隔离原则：客户端不应该依赖它不需要的接口，即一个类对另一个接口的依赖应该建</description><content type="html"><![CDATA[<h2 id="设计模式的七大设计原则">设计模式的七大设计原则</h2>
+<ol>
+<li>单一职责原则：一个类应该只负责一项职责；</li>
+<li>接口隔离原则：客户端不应该依赖它不需要的接口，即一个类对另一个接口的依赖应该建立在最小的接口上；</li>
+<li>依赖倒转原则：
+<ul>
+<li>高层模块不应该依赖低层模块，两者都应该依赖其抽象</li>
+<li>抽象不要依赖细节，细节应该依赖抽象</li>
+<li>依赖倒转（倒置）的中心思想是面向接口编程</li>
+</ul>
+</li>
+<li>里氏替换原则：
+<ul>
+<li>里氏替换原则在1988年，由麻省理工学院的一位姓里的女士提出的</li>
+<li>如果对每个类型为T1的对象o1,都有类型为T2的对象o2,使得以T1定义的所有程序P在所有的对象o1都替换成o2时，程序P的行为没有发生变化，那么类型T2是类型T1的子类型。
+换句话说，所有引用基类的地方必须能透明地使用其子类的对象</li>
+<li>在使用继承时，遵循里氏替换原则，在子类中尽量不要重写父类的方法</li>
+<li>里氏替换原则告诉我们，继承实际上是让两个类的耦合性增强了，<em><strong>在适当的情况下，可以通过聚合，组合，依赖来解决问题</strong></em>。</li>
+</ul>
+</li>
+<li>开闭原则：
+<ul>
+<li>是编程中最基础、最重要的设计原则</li>
+<li>一个软件实体类、模块和函数应该对扩展开发，对修改关闭。用抽象构建框架，用实现扩展细节</li>
+<li>当软件变化时，尽量通过扩展软件实体的行为来实现变化，而不是通过修改已有的代码来实现</li>
+<li>编程中遵循其他原则，以及使用设计模式的目的就是遵循开闭原则</li>
+</ul>
+</li>
+<li>迪米特法则
+<ul>
+<li>一个对象应对其他对象保持最少的了解</li>
+<li>类与类关系越密切，耦合性越大</li>
+<li>迪米特法则又叫<em><strong>最少知道原则</strong></em>，即一个类对自己依赖的类知道的越少越好。也就是说，对于被依赖的类不管多么复杂，都应将逻辑封装在类的内部。对外除了提供public方法不对外泄露任何信息</li>
+<li>迪米特法则还有一个更简单的定义：只与直接朋友通信（成员变量，方法参数，方法返回值中的类为直接朋友，局部变量中的类不是直接朋友）</li>
+</ul>
+</li>
+<li>合成复用原则：尽量使用合成/聚合的方式，而不是使用继承</li>
+</ol>
+<p>题外话： 接口和抽象类存在的价值在于设计，规范</p>
+<h2 id="设计模式类型">设计模式类型</h2>
+<p>设计模式分为三类，共23种</p>
+<ol>
+<li>
+<p>创建型模式（共5种）：</p>
+<p>单例模式、抽象工厂模式、原型模式、建造者模式、工厂模式</p>
+</li>
+<li>
+<p>结构型模式（共7种）：</p>
+<p>适配器模式、桥接模式、装饰者模式、组合模式、外观模式、享元模式、代理模式</p>
+</li>
+<li>
+<p>行为型模式（共11种）：
+模板方法模式、命令模式、访问者模式、迭代器模式、观察者模式、中介者模式、备忘录模式、解释器模式、状态模式、策略模式、职责链模式</p>
+</li>
+</ol>
+]]></content></item><item><title>设计模式-创建型模式（第2篇）</title><link>https://hesoong.github.io/posts/designpattern/designpattern-2-creational/</link><pubDate>Mon, 04 May 2020 14:11:04 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/designpattern/designpattern-2-creational/</guid><description>创建型设计模式 通过&amp;quot;对象创建&amp;quot;模式绕开new, 来避免对象创建(new)过程中所导致的紧耦合(依赖具体类),从而支持对象创</description><content type="html"><![CDATA[<h2 id="创建型设计模式">创建型设计模式</h2>
+<blockquote>
+<p>通过&quot;对象创建&quot;模式绕开new, 来避免对象创建(new)过程中所导致的紧耦合(依赖具体类),从而支持对象创建的稳定.它是借口抽象后的第一步工作.</p>
+</blockquote>
+<p>上篇说道创建型设计模式一共五种，分别为：</p>
+<p>单例模式、抽象工厂模式、原型模式、建造者模式、工厂模式，下面分别详细的讲解这五种模式。</p>
+<p><a href="https://github.com/He-Song/designPattern">各模式代码演示源码请访问</a></p>
+<h3 id="单例模式">单例模式</h3>
+<p>单例模式就是采取一定的方法保证在整个软件系统中，对某个类只存在一个对象实例，并且该类只提供一个取得其对象实例的方法（静态方法）</p>
+<p>这里说道的采取<em><strong>一定的方法</strong></em>一般有以下几种：</p>
+<ol>
+<li>
+<p>饿汉式（静态常量）</p>
+<ul>
+<li>
+<p>构造器私有化（防止new）</p>
+</li>
+<li>
+<p>类的内部创建对象（申明成员变量的时候直接new）</p>
+</li>
+<li>
+<p>向外暴露一个静态的公共方法</p>
+</li>
+</ul>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Singleton01</span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">static</span> Singleton01 instance <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Singleton01<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">Singleton01</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Singleton01 <span style="color:#a6e22e">getInstance</span><span style="color:#f92672">(){</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span>  instance<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><ol start="2">
+<li>
+<p>饿汉式（静态代码块）</p>
+<ul>
+<li>
+<p>同上</p>
+</li>
+<li>
+<p>不同之处在于创建对象是在静态代码块中完成
+饿汉式优缺点：</p>
+</li>
+<li>
+<p>优点：简单，在类装载的时候就完成实例化，避免线程同步的问题</p>
+</li>
+<li>
+<p>缺点：没有达到lazy loading 的效果，造成内存浪费</p>
+</li>
+</ul>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Singleton02</span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">static</span> Singleton02 instance<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">static</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>      instance <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Singleton02<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">Singleton02</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Singleton02 <span style="color:#a6e22e">getInstance</span><span style="color:#f92672">(){</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span>  instance<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><ol start="3">
+<li>
+<p>懒汉式（线程不安全）不可用</p>
+<ul>
+<li>线程不安全 不可用</li>
+</ul>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Singleton01</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> Singleton01 instance<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">Singleton01</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>   
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Singleton01 <span style="color:#a6e22e">getInstance</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// 该方法不能保证线程安全
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">null</span> <span style="color:#f92672">==</span> instance<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>   	   instance <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Singleton01<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> instance<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><ol start="4">
+<li>
+<p>懒汉式（线程安全，同步方法）</p>
+<ul>
+<li>可用但是在方法上加同步锁，效率低</li>
+</ul>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Singleton02</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> Singleton02 instance<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">Singleton02</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">  方法上加同步锁，效率低
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">   */</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">synchronized</span> Singleton02 <span style="color:#a6e22e">getInstance</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">null</span> <span style="color:#f92672">==</span> instance<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>   	   instance <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Singleton02<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> instance<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><ol start="5">
+<li>
+<p>懒汉式（线程不安全， 同步代码块）</p>
+<ul>
+<li><strong>不可用</strong></li>
+</ul>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Singleton03</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> Singleton03 instance<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">Singleton03</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Singleton03 <span style="color:#a6e22e">getInstance</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// 该方法不能保证线程安全
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">null</span> <span style="color:#f92672">==</span> instance<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>   	   <span style="color:#75715e">//此处线程不安全
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>   	   <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>Singleton03<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>   		   instance <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Singleton03<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>   	   <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> instance<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><ol start="6">
+<li>双重检查</li>
+</ol>
+<ul>
+<li>
+<p>提供一个静态的公共方法，加入双重检查的代码，解决线程安全的问题，同时解决懒加载的问题</p>
+</li>
+<li>
+<p>同时保证了效率，<em><strong>推荐使用</strong></em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Singleton</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">volatile</span> Singleton instance<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">Singleton</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Singleton <span style="color:#a6e22e">getInstance</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>   
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">null</span> <span style="color:#f92672">==</span> instance<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>Singleton<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>instance <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                  instance <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Singleton<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> instance<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div></li>
+</ul>
+<ol start="7">
+<li>
+<p>静态内部类</p>
+<ul>
+<li>
+<p>外部类装载的时候，静态内部类并不会装载</p>
+</li>
+<li>
+<p>当用到这个静态内部类的时候才回去装载，类在装载的时候没有线程同步的问题</p>
+</li>
+<li>
+<p>因此该问题即解决了线程同步的问题同时也达到了懒加载的效果，<em><strong>建议使用</strong></em></p>
+</li>
+</ul>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* 静态内部类
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*/</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Singleton1</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#a6e22e">Singleton1</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SingletonInstance</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">volatile</span> Singleton1 INSTANCE <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Singleton1<span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Singleton1 <span style="color:#a6e22e">getInstance</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> SingletonInstance<span style="color:#f92672">.</span><span style="color:#a6e22e">INSTANCE</span><span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><ol start="8">
+<li>
+<p>枚举</p>
+<ul>
+<li>
+<p>借助jdk1.5中添加的枚举来实现单例模式，不仅能避免多线程同步的问题，而且还能防止反序列化重新创建对象</p>
+</li>
+<li>
+<p>该方式是Effective Java 作者 Josh Bloch 提倡的方式</p>
+</li>
+<li>
+<p><em><strong>推荐使用</strong></em></p>
+</li>
+</ul>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">* 枚举
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">*/</span>   
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">enum</span> Singleton2 <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  INSTANCE<span style="color:#f92672">;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">sayOK</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>      System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;hha&#34;</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="抽象工厂模式">抽象工厂模式</h3>
+<blockquote>
+<p>提供一个接口,让该接口负责创建一系列&quot;相关或者相互依赖的对象&quot;, 无需指定它们具体的类</p>
+</blockquote>
+<p><img src="image-20211014161212640.png" alt="image-20211014161212640"></p>
+<h3 id="工厂模式">工厂模式</h3>
+<h4 id="工厂方法模式">工厂方法模式</h4>
+<blockquote>
+<p>定义一个用于创建对象的接口, 让子类决定实例化哪一个类.Factory Method 使得一个类的实例化延迟(目的:解耦)到子类</p>
+<p>一个对象对应一个工厂</p>
+</blockquote>
+<p><img src="image-20211014155437368.png" alt="image-20211014155437368"></p>
+<h3 id="原型模式">原型模式</h3>
+<blockquote>
+<p>使用原型实例指定创建对象的种类,然后通过拷贝这些原型来创建新的对象</p>
+</blockquote>
+<p><img src="image-20211014161916032.png" alt="image-20211014161916032"></p>
+<h3 id="建造者模式">建造者模式</h3>
+<blockquote>
+<p>动机: 一个复杂对象的创建工作</p>
+</blockquote>
+<p><img src="image-20211014162343359.png" alt="image-20211014162343359"></p>
+<blockquote>
+<p>定义: 将一个复杂的对象的构建与其表示相分离,使得同样的构建过程(稳定)可以创建不同的表示(变化)</p>
+</blockquote>
+<p><img src="image-20211014163459756.png" alt="image-20211014163459756"></p>
+]]></content></item><item><title>设计模式-结构型模式（第3篇）</title><link>https://hesoong.github.io/posts/designpattern/designpattern-3-structural/</link><pubDate>Thu, 14 Oct 2021 14:57:04 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/designpattern/designpattern-3-structural/</guid><description>结构型模式 通过类继承或者对象组合获得灵活的结构，从而应对需求变化为对象的结构带来冲击 结构型模式分类一共有7种:适配器模式、桥接模式、装饰者模</description><content type="html"><![CDATA[<h2 id="结构型模式">结构型模式</h2>
+<blockquote>
+<p>通过类继承或者对象组合获得灵活的结构，从而应对需求变化为对象的结构带来冲击</p>
+</blockquote>
+<p>结构型模式分类一共有7种:适配器模式、桥接模式、装饰者模式、组合模式、外观模式、享元模式、代理模式</p>
+<h3 id="适配器模式">适配器模式</h3>
+<blockquote>
+</blockquote>
+<h3 id="桥接模式">桥接模式</h3>
+<blockquote>
+<p>定义：将抽象部分（业务功能）与实现部分（平台实现）分离，使它们都可以独立的变化。</p>
+</blockquote>
+<ol>
+<li>动机：<img src="image-20211015145925175.png" alt="image-20211015145925175"></li>
+<li>类图：<img src="image-20211015151235690.png" alt="image-20211015151235690"></li>
+<li>总结：<img src="image-20211015151441376.png" alt="image-20211015151441376"></li>
+</ol>
+<h3 id="装饰者模式">装饰者模式</h3>
+<blockquote>
+<p>定义：动态（组合）地给一个对象增加一些额外的职责，就增加功能而言，Decorator模式比生成子类（继承）更加灵活（消除重复代码&amp;减少子类个数）</p>
+<p>场景：IO Stream</p>
+</blockquote>
+<ol>
+<li>
+<p>动机
+<img src="image-20211015143650228.png" alt="image-20211015143650228"></p>
+</li>
+<li>
+<p>类图：
+<img src="image-20211015145658681.png" alt="image-20211015145658681"></p>
+</li>
+<li>
+<p>总结：
+<img src="image-20211015145728299.png" alt="image-20211015145728299"></p>
+</li>
+</ol>
+<h3 id="组合模式">组合模式</h3>
+<h3 id="外观模式">外观模式</h3>
+<h3 id="享元模式">享元模式</h3>
+<blockquote>
+<p>定义：运用<strong>共享</strong>技术有效地支持<strong>大量</strong>细粒度 的对象。</p>
+</blockquote>
+<ol>
+<li>动机：<img src="image-20211015151922420.png" alt="image-20211015151922420"></li>
+<li>类图：<img src="image-20211015152307177.png" alt="image-20211015152307177"></li>
+</ol>
+<h3 id="代理模式">代理模式</h3>
+]]></content></item><item><title>设计模式-行为型模式（第4篇）</title><link>https://hesoong.github.io/posts/designpattern/designpattern-4-behavioral/</link><pubDate>Fri, 15 Oct 2021 10:27:04 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/designpattern/designpattern-4-behavioral/</guid><description>行为型模式 通过类继承或者对象组合来划分类与对象的职责，从而应对需求变化为多个交互的对象的冲击 行为型型模式分类一共有7种：模板方法模式、命令模</description><content type="html"><![CDATA[<h2 id="行为型模式">行为型模式</h2>
+<blockquote>
+<p>通过类继承或者对象组合来划分类与对象的职责，从而应对需求变化为多个交互的对象的冲击</p>
+</blockquote>
+<p>行为型型模式分类一共有7种：模板方法模式、命令模式、访问者模式、迭代器模式、观察者模式、中介者模式、备忘录模式、解释器模式、状态模式、策略模式、职责链模式</p>
+<h3 id="模板方法模式">模板方法模式</h3>
+<blockquote>
+<p>定义：定义一个操作中的算法的骨架（稳定），而将一些步骤延迟（变化）到子类。Template Method使得子类既可以不改变（复用）一个算法的结构也可重定义（override 重写）该算法的某些特定步骤。</p>
+</blockquote>
+<ol>
+<li>
+<p>动机：<img src="image-20211015103831904.png" alt="image-20211015103831904"></p>
+</li>
+<li>
+<p>类图：</p>
+</li>
+</ol>
+<p><img src="image-20211015104809193.png" alt="image-20211015104809193"></p>
+<h3 id="策略模式">策略模式</h3>
+<blockquote>
+<p>定义一系列算法，把他们一个一个封装起来，并且使他们可互相替换（变化）。该模式使得算法可独立于使用它的客户程序（稳定）而变化（扩展，子类化）</p>
+</blockquote>
+<ol>
+<li>类图：<img src="image-20211015110528240.png" alt="image-20211015110528240"></li>
+</ol>
+<h3 id="观察者模式">观察者模式</h3>
+<blockquote>
+<p>定义：定义对象间的一种一对多（变化）的依赖关系，以便当一个对象（subject）的状态发生改变时，所有依赖于它的对象都得到通知并自动更新</p>
+<p>场景：消息订阅</p>
+</blockquote>
+<ol>
+<li>
+<p>动机：<img src="image-20211015111939215.png" alt="image-20211015111939215"></p>
+</li>
+<li>
+<p>类图：
+<img src="image-20211015120058046.png" alt="image-20211015120058046"></p>
+</li>
+<li>
+<p>总结：</p>
+</li>
+</ol>
+<p><img src="image-20211015120247286.png" alt="image-20211015120247286"></p>
+<h3 id="命令模式">命令模式</h3>
+<h3 id="访问者模式">访问者模式</h3>
+<h3 id="迭代器模式">迭代器模式</h3>
+<h3 id="中介者模式">中介者模式</h3>
+<h3 id="备忘录模式">备忘录模式</h3>
+<h3 id="解释器模式">解释器模式</h3>
+<h3 id="状态模式">状态模式</h3>
+<h3 id="职责链模式">职责链模式</h3>
+]]></content></item></channel></rss>

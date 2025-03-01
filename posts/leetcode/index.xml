@@ -1,0 +1,116 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Leetcode(系列) on Song's Blog</title><link>https://hesoong.github.io/posts/leetcode/</link><description>Recent content in Leetcode(系列) on Song's Blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>Mr.heesong@gmail.com (Song)</managingEditor><webMaster>Mr.heesong@gmail.com (Song)</webMaster><copyright>&lt;a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0&lt;/a></copyright><lastBuildDate>Thu, 24 Aug 2023 13:57:05 +0800</lastBuildDate><atom:link href="https://hesoong.github.io/posts/leetcode/index.xml" rel="self" type="application/rss+xml"/><item><title>Leetcode之探索学习</title><link>https://hesoong.github.io/posts/leetcode/explorelearn/</link><pubDate>Thu, 24 Aug 2023 17:22:31 +0800</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://hesoong.github.io/posts/leetcode/explorelearn/</guid><description>Binary Tree(二叉树) Introduction A tree is a frequently-used data structure to simulate a hierarchical tree structure. 树是经常使用的数据结构，以模拟分层树结构。 Each node of the tree will have a root value and a list of references to other nodes which are called child nodes. From graph</description><content type="html"><![CDATA[<h2 id="binary-tree二叉树">Binary Tree(二叉树)</h2>
+<hr>
+<h3 id="introduction">Introduction</h3>
+<p><em>A <code>tree</code> is a frequently-used data structure to simulate a hierarchical tree structure.</em></p>
+<p>树是经常使用的数据结构，以模拟分层树结构。</p>
+<p><em>Each node of the tree will have a root value and a list of references to other nodes which are called child nodes. From graph view, a tree can also be defined as a directed acyclic graph which has <code>N nodes</code> and <code>N-1 edges</code>.</em></p>
+<p>树的每个节点都有一个根值和对其他节点(称为子节点)的引用列表。从图形的角度来看，一棵树也可以定义为一个有 <code>N</code> 个节点和 <code>N-1</code>条边的有向无环图。</p>
+<p><em>A <code>Binary Tree</code> is one of the most typical tree structure. As the name suggests, a binary tree is a tree data structure in which each node has <code>at most two children</code>, which are referred to as the left child and the right child.</em></p>
+<p><em><strong>二叉树</strong></em>是最典型的树结构之一。顾名思义，二叉树是一种树型数据结构，其中每个节点<em><strong>最多有两个</strong></em>子节点，即左子节点和右子节点。</p>
+<h3 id="traverse-a-tree">Traverse a Tree</h3>
+<h4 id="pre-order-traversal---前序">Pre-order Traversal - 前序</h4>
+<hr>
+<p>Pre-order traversal is to visit the root first. Then traverse the left subtree. Finally, traverse the right subtree.</p>
+<p>预序遍历是先访问根，然后遍历左侧子树，最后遍历右侧子树。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Definition for a binary tree node.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * type TreeNode struct {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> *     Val int
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> *     Left *TreeNode
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> *     Right *TreeNode
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * }
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">preorderTraversal</span>(<span style="color:#a6e22e">root</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">TreeNode</span>) []<span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">res</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">root</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span>){
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">res</span> = append(<span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">root</span>.<span style="color:#a6e22e">Val</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">res</span> = append(<span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">preorderTraversal</span>(<span style="color:#a6e22e">root</span>.<span style="color:#a6e22e">Left</span>)<span style="color:#f92672">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">res</span> = append(<span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">preorderTraversal</span>(<span style="color:#a6e22e">root</span>.<span style="color:#a6e22e">Right</span>)<span style="color:#f92672">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="in-order-traversal---中序">In-order Traversal - 中序</h4>
+<hr>
+<p>In-order traversal is to traverse the left subtree first. Then visit the root. Finally, traverse the right subtree.</p>
+<p>顺序遍历是先遍历左边的子树，然后访问根，最后遍历右边的子树。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Definition for a binary tree node.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * type TreeNode struct {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> *     Val int
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> *     Left *TreeNode
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> *     Right *TreeNode
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * }
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">inorderTraversal</span>(<span style="color:#a6e22e">root</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">TreeNode</span>) []<span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">res</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">root</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span>){
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">res</span> = append(<span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">inorderTraversal</span>(<span style="color:#a6e22e">root</span>.<span style="color:#a6e22e">Left</span>)<span style="color:#f92672">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">res</span> = append(<span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">root</span>.<span style="color:#a6e22e">Val</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">res</span> = append(<span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">inorderTraversal</span>(<span style="color:#a6e22e">root</span>.<span style="color:#a6e22e">Right</span>)<span style="color:#f92672">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="post-order-traversal---后序">Post-order Traversal - 后序</h4>
+<hr>
+<p>Post-order traversal is to traverse the left subtree first. Then traverse the right subtree. Finally, visit the root.</p>
+<p>后序遍历是先遍历左侧子树，然后遍历右侧子树，最后访问根。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Definition for a binary tree node.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * type TreeNode struct {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> *     Val int
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> *     Left *TreeNode
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> *     Right *TreeNode
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * }
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">postorderTraversal</span>(<span style="color:#a6e22e">root</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">TreeNode</span>) []<span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">res</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">root</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span>){
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">res</span> = append(<span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">postorderTraversal</span>(<span style="color:#a6e22e">root</span>.<span style="color:#a6e22e">Left</span>)<span style="color:#f92672">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">res</span> = append(<span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">postorderTraversal</span>(<span style="color:#a6e22e">root</span>.<span style="color:#a6e22e">Right</span>)<span style="color:#f92672">...</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> append(<span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">root</span>.<span style="color:#a6e22e">Val</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="level-order-traversal---层序">Level Order Traversal - 层序</h4>
+<hr>
+<p>Level-order traversal is to traverse the tree level by level.</p>
+<p>层序遍历就是逐层遍历树。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Definition for a binary tree node.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * type TreeNode struct {
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> *     Val int
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> *     Left *TreeNode
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> *     Right *TreeNode
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * }
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">levelOrder</span>(<span style="color:#a6e22e">root</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">TreeNode</span>) [][]<span style="color:#66d9ef">int</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">res</span> <span style="color:#f92672">:=</span> [][]<span style="color:#66d9ef">int</span>{}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">root</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span>){
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">cur</span> <span style="color:#f92672">:=</span> []<span style="color:#f92672">*</span><span style="color:#a6e22e">TreeNode</span>{<span style="color:#a6e22e">root</span>}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> len(<span style="color:#a6e22e">cur</span>) &gt; <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">next</span> <span style="color:#f92672">:=</span> []<span style="color:#f92672">*</span><span style="color:#a6e22e">TreeNode</span>{}
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">res_level</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">int</span>, len(<span style="color:#a6e22e">cur</span>))
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">node</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span>(<span style="color:#a6e22e">cur</span>){
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">res_level</span>[<span style="color:#a6e22e">i</span>] = <span style="color:#a6e22e">node</span>.<span style="color:#a6e22e">Val</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">node</span>.<span style="color:#a6e22e">Left</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span>){
+</span></span><span style="display:flex;"><span>              <span style="color:#a6e22e">next</span> = append(<span style="color:#a6e22e">next</span>, <span style="color:#a6e22e">node</span>.<span style="color:#a6e22e">Left</span>)
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">node</span>.<span style="color:#a6e22e">Right</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span>){
+</span></span><span style="display:flex;"><span>              <span style="color:#a6e22e">next</span> = append(<span style="color:#a6e22e">next</span>, <span style="color:#a6e22e">node</span>.<span style="color:#a6e22e">Right</span>)
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">res</span> = append(<span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">res_level</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">cur</span> = <span style="color:#a6e22e">next</span>        
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="recursive-or-iterative">Recursive or Iterative</h4>
+<hr>
+<p>递归和迭代</p>
+]]></content></item></channel></rss>
