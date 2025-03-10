@@ -1,6 +1,66 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Song's Blog</title><link>https://blog.singasoong.top/posts/</link><description>Recent content in Posts on Song's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh</language><managingEditor>Mr.heesong@gmail.com (Song)</managingEditor><webMaster>Mr.heesong@gmail.com (Song)</webMaster><copyright>&lt;a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0&lt;/a></copyright><lastBuildDate>Mon, 23 Dec 2024 14:40:18 +0800</lastBuildDate><atom:link href="https://blog.singasoong.top/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Leetcode(系列)</title><link>https://blog.singasoong.top/posts/leetcode/</link><pubDate>Thu, 24 Aug 2023 13:57:05 +0800</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://blog.singasoong.top/posts/leetcode/</guid><description>Leetcode 是一个在线平台，为软件工程师和开发人员提供编码挑战和面试准备资源。 刷题之前可以先看看这里面的topic：explore/learn</description><content type="html"><![CDATA[<p><a href="https://leetcode.com/">Leetcode</a> 是一个在线平台，为软件工程师和开发人员提供编码挑战和面试准备资源。
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Song's Blog</title><link>https://blog.singasoong.top/posts/</link><description>Recent content in Posts on Song's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh</language><managingEditor>Mr.heesong@gmail.com (Song)</managingEditor><webMaster>Mr.heesong@gmail.com (Song)</webMaster><copyright>&lt;a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0&lt;/a></copyright><lastBuildDate>Mon, 10 Mar 2025 16:13:25 +0800</lastBuildDate><atom:link href="https://blog.singasoong.top/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Leetcode(系列)</title><link>https://blog.singasoong.top/posts/leetcode/</link><pubDate>Thu, 24 Aug 2023 13:57:05 +0800</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://blog.singasoong.top/posts/leetcode/</guid><description>Leetcode 是一个在线平台，为软件工程师和开发人员提供编码挑战和面试准备资源。 刷题之前可以先看看这里面的topic：explore/learn</description><content type="html"><![CDATA[<p><a href="https://leetcode.com/">Leetcode</a> 是一个在线平台，为软件工程师和开发人员提供编码挑战和面试准备资源。
 刷题之前可以先看看这里面的topic：<a href="https://leetcode.com/explore/learn">explore/learn</a></p>
-]]></content></item><item><title>设计模式(系列)</title><link>https://blog.singasoong.top/posts/designpattern/</link><pubDate>Sun, 03 May 2020 13:19:31 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://blog.singasoong.top/posts/designpattern/</guid><description>设计模式（Design pattern）代表了最佳的实践，通常被有经验的面向对象的软件开发人员所采用。</description><content type="html">&lt;p>设计模式（Design pattern）代表了最佳的实践，通常被有经验的面向对象的软件开发人员所采用。&lt;/p></content></item><item><title>报错 | PKIX path building failed</title><link>https://blog.singasoong.top/posts/https_cert_trust/</link><pubDate>Mon, 23 Dec 2024 14:40:18 +0800</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://blog.singasoong.top/posts/https_cert_trust/</guid><description>我们在开发过程中经常会遇到https 请求失败的问题：PKIX path building failed，这往往是由于网站使用自签证书，不是官方证书授权机构授权的证书，</description><content type="html"><![CDATA[<blockquote>
+]]></content></item><item><title>设计模式(系列)</title><link>https://blog.singasoong.top/posts/designpattern/</link><pubDate>Sun, 03 May 2020 13:19:31 +0000</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://blog.singasoong.top/posts/designpattern/</guid><description>设计模式（Design pattern）代表了最佳的实践，通常被有经验的面向对象的软件开发人员所采用。</description><content type="html">&lt;p>设计模式（Design pattern）代表了最佳的实践，通常被有经验的面向对象的软件开发人员所采用。&lt;/p></content></item><item><title>Hugo集成Gitalk评论插件</title><link>https://blog.singasoong.top/posts/gitalk/</link><pubDate>Mon, 10 Mar 2025 16:13:25 +0800</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://blog.singasoong.top/posts/gitalk/</guid><description>本文主要介绍hugo 集成gitalk, 效果图如下： 在github注册一个public 的代码仓库 在github注册一个auth application 在博客模版中配</description><content type="html"><![CDATA[<p>本文主要介绍hugo 集成gitalk, 效果图如下：
+<img src="https://cdn.jsdelivr.net/gh/hesoong/image-bed@main/gitalk/demo.png" alt="gitalk"></p>
+<h2 id="在github注册一个public-的代码仓库">在github注册一个public 的代码仓库</h2>
+<h2 id="在github注册一个auth-application">在github注册一个auth application</h2>
+<h2 id="在博客模版中配置gitalk">在博客模版中配置gitalk</h2>
+<h3 id="添加gitalkhtml-">添加<code>gitalk.html </code></h3>
+<p>添加文件<code>gitalk.html</code>到 <code>/partial/gitalk.html</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>{{ if .Site.Params.enableGitalk }}
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gitalk-container&#34;</span>&gt;&lt;/<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">link</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js&#34;</span>&gt;&lt;/<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">&lt;!-- &lt;link rel=&#34;stylesheet&#34; href=&#34;https://unpkg.com/gitalk/dist/gitalk.css&#34;&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">&lt;script src=&#34;https://unpkg.com/gitalk/dist/gitalk.min.js&#34;&gt;&lt;/script&gt; --&gt;</span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">gitalk</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Gitalk</span>({
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">clientID</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;{{ .Site.Params.Gitalk.clientId }}&#39;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">clientSecret</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;{{ .Site.Params.Gitalk.clientSecret }}&#39;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">repo</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;{{ .Site.Params.Gitalk.repo }}&#39;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">owner</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;{{ .Site.Params.Gitalk.owner }}&#39;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">admin</span><span style="color:#f92672">:</span> [<span style="color:#e6db74">&#39;{{ .Site.Params.Gitalk.owner }}&#39;</span>],
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">location</span>.<span style="color:#a6e22e">pathname</span>, <span style="color:#75715e">// Ensure uniqueness and length less than 50
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">distractionFreeMode</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">false</span> <span style="color:#75715e">// Facebook-like distraction free mode
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	});
+</span></span><span style="display:flex;"><span>	(<span style="color:#66d9ef">function</span> () {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> ([<span style="color:#e6db74">&#34;localhost&#34;</span>, <span style="color:#e6db74">&#34;127.0.0.1&#34;</span>].<span style="color:#a6e22e">indexOf</span>(window.<span style="color:#a6e22e">location</span>.<span style="color:#a6e22e">hostname</span>) <span style="color:#f92672">!=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) {
+</span></span><span style="display:flex;"><span>			document.<span style="color:#a6e22e">getElementById</span>(<span style="color:#e6db74">&#39;gitalk-container&#39;</span>).<span style="color:#a6e22e">innerHTML</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Gitalk comments not available by default when the website is previewed locally.&#39;</span>;
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">gitalk</span>.<span style="color:#a6e22e">render</span>(<span style="color:#e6db74">&#39;gitalk-container&#39;</span>);
+</span></span><span style="display:flex;"><span>	})();
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span>{{ end }}
+</span></span></code></pre></div><p>并在 layouts/posts/single.html文件中添加 {{ partial &ldquo;gitalk.html&rdquo; . }}代码段</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>{{ partial &#34;pagination-single.html&#34; . }}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>{{ partial &#34;gitalk.html&#34; . }}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>{{ if .Site.DisqusShortname }}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><h3 id="在博客配置文件中配置gitalk">在博客配置文件中配置gitalk</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">params</span>:
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">enableGitalk</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">gitalk</span>:
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">enable</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">owner</span>: <span style="color:#ae81ff">your-github-username</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">repo</span>: <span style="color:#ae81ff">your-repo-name</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">clientId</span>: <span style="color:#ae81ff">your-client-id</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">clientSecret</span>: <span style="color:#ae81ff">your-client-secret</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">admin_user</span>: <span style="color:#ae81ff">your-github-username</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">proxy</span>: <span style="color:#ae81ff">https://netnr-proxy.cloudno.de/https://github.com/login/oauth/access_token</span>
+</span></span></code></pre></div><p>然后就可以部署代码检查效果了。</p>
+<h2 id="需要注意">需要注意</h2>
+<ol>
+<li>本地地址（包含localhost, 127.0.0.1）不会显示评论插件</li>
+<li>首次使用插件或者新发布博客，需要admin_user 进入博客界面进行评论初始化（访问博客页面会在创建的public仓库创建一个issue）</li>
+<li>插件会以博客名称作为issue 名称，文章的relative path 为issue tag, 由于github 的tag 字数限制为50。否则初始化博客评论会报错。 因此应控制文件名，文件路径不要超长。</li>
+</ol>
+]]></content></item><item><title>报错 | PKIX path building failed</title><link>https://blog.singasoong.top/posts/https_cert_trust/</link><pubDate>Mon, 23 Dec 2024 14:40:18 +0800</pubDate><author>Mr.heesong@gmail.com (Song)</author><guid>https://blog.singasoong.top/posts/https_cert_trust/</guid><description>我们在开发过程中经常会遇到https 请求失败的问题：PKIX path building failed，这往往是由于网站使用自签证书，不是官方证书授权机构授权的证书，</description><content type="html"><![CDATA[<blockquote>
 <p>我们在开发过程中经常会遇到https 请求失败的问题：PKIX path building failed，这往往是由于网站使用自签证书，不是官方证书授权机构授权的证书，在请求加密过程中证书验证失败导致。详细如下报错：</p>
 </blockquote>
 <pre tabindex="0"><code class="language-log" data-lang="log">Caused by: javax.net.ssl.SSLHandshakeException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
