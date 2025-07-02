@@ -330,8 +330,8 @@ The flow illustrated in Figure 3 includes the following steps:</p>
 <h3 id="方案三n3540做旁路由也叫旁路网关">方案三：N3540做旁路由（也叫旁路网关）</h3>
 <p>经过前面两种方案的尝试，方案都并不完美，最终通过一番搜索与学习，最终决定将主路由用作旁路由，AC升级作为主路由。
 首先光猫网线出来直接接入ACWan口，进入路由器控制中心Wan口输入账号密码进行拨号,Lan口设置静态IP(如：192.168.100.233),开启DHCP.
-image.png
-N3540做旁路由Lan口接入AC Lan口，修改设置：</p>
+N3540做旁路由Lan口接入AC Lan口，修改设置：
+<img src="https://cdn.jsdelivr.net/gh/hesoong/image-bed@main/home_network.png" alt="gitalk"></p>
 <ol>
 <li>Lan口选择静态地址（与AC主路由保持网段一致，如192.168.100.1）；网关设置成AC 主路由地址（192.168.100.233）这很重要。</li>
 <li>Lan口关闭DHCP服务</li>
